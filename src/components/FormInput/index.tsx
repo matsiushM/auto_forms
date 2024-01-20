@@ -9,7 +9,7 @@ import {
 
 import FormSelect from "../FormInputsTyps/FormSelect.tsx";
 import FormInputTxt from "../FormInputsTyps/FormInputTxt.tsx";
-import {BODY_TYPE, BRANDS, FUELS, GEARBOX} from "../config/constants.ts";
+import {BODY_TYPE, FUELS, GEARBOX} from "../config/constants.ts";
 import {PARTS} from "../config/constsParts.ts";
 import MarkModelInputForm from "../FormInputsTyps/MarkModelInputForm.tsx";
 
