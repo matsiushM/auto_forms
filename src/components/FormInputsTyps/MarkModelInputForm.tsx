@@ -19,29 +19,31 @@ const MarkModelInputForm = () => {
 
     return <>
         <FormControl fullWidth>
-            <Typography variant={"h4"}>Макрка</Typography>
+        <Typography variant={"h4"}>Марка</Typography>
             <Select
-                id = 'select-with-marka'
+                id='select-with-marka'
                 value={marka}
                 displayEmpty
                 inputProps={{'aria-label': 'Without label'}}
                 onChange={handleChangeMark}
             >
                 {Object.values(BRANDS).map(values => (
-                    <MenuItem id={values.id} value={values.marka}>{values.marka}</MenuItem>
+                    <MenuItem key={values.id} value={values.marka}>{values.marka}</MenuItem>
                 ))}
             </Select>
-            <Typography variant={"h4"}>Модель</Typography>
+        </FormControl>
+        <FormControl fullWidth>
+        <Typography variant={"h4"}>Модель</Typography>
             <Select
-                id = 'select-with-model'
+                id='select-with-model'
                 value={model}
                 displayEmpty
                 onChange={handleChangeModel}
                 inputProps={{'aria-label': 'Without label'}}
                 defaultValue={Object.values(BRANDS)[0].marka}
             >
-                {filteredOptions?.models.map(values => (
-                    <MenuItem id={filteredOptions.id} value={values}>{values}</MenuItem>
+                {filteredOptions?.models.map((values, index) => (
+                    <MenuItem key={index} value={values}>{values}</MenuItem>
                 ))}
             </Select>
         </FormControl>

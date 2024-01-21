@@ -24,7 +24,7 @@ const FormSelect = ({title, isValue}: Props) => {
             defaultValue={Object.values(isValue)[0].title}
         >
             {Object.values(isValue).map(values =>(
-                <MenuItem id={values.id} value={values.title}>{values.title}</MenuItem>
+                <MenuItem key={values.id} id={values.id} value={values.title}>{values.title}</MenuItem>
             ))}
         </Select>
     </FormControl>

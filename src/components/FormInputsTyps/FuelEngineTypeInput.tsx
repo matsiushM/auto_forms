@@ -16,7 +16,7 @@ const FuelEngineTypeInput = () => {
         option.title.toLowerCase().includes(fuel.toLowerCase())
     );
 
-    return <Box sx={{m:1, display: 'flex'}}>
+    return <Box sx={{m:1}}>
         <FormControl fullWidth>
             <Typography variant={"h4"}>Топливо</Typography>
             <Select
@@ -27,9 +27,11 @@ const FuelEngineTypeInput = () => {
                 onChange={handleChangeMark}
             >
                 {Object.values(FUELS).map(values => (
-                    <MenuItem id={values.id} value={values.title}>{values.title}</MenuItem>
+                    <MenuItem key={values.id} value={values.title}>{values.title}</MenuItem>
                 ))}
             </Select>
+        </FormControl>
+            <FormControl fullWidth>
             <Typography variant={"h4"}>Тип</Typography>
             <Select
                 id = 'select-with-engine-type'
@@ -38,8 +40,8 @@ const FuelEngineTypeInput = () => {
                 onChange={handleChangeEngineType}
                 inputProps={{'aria-label': 'Without label'}}
             >
-                {filteredOptions?.engineType.map(values => (
-                    <MenuItem id={filteredOptions.id} value={values}>{values}</MenuItem>
+                {filteredOptions?.engineType.map((values,index) => (
+                    <MenuItem key={index} value={values}>{values}</MenuItem>
                 ))}
             </Select>
         </FormControl>

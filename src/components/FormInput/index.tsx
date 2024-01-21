@@ -1,10 +1,9 @@
-import {useState} from "react";
+import React, {useState} from "react";
 import {
     Box,
-    Checkbox,
-    FormControlLabel,
-    Paper,
-    Typography
+    FormControl,
+    FormControlLabel, FormLabel,
+    Paper, Radio, RadioGroup,
 } from "@mui/material";
 
 import FormSelect from "../FormInputsTyps/FormSelect.tsx";
@@ -27,23 +26,15 @@ const styles = {
 }
 const FormInput = () => {
 
-    const [state, setState] = useState({
-        usedParts: true,
-        newParts: false,
-    });
+    const [value, setValue] = useState('Б/У');
 
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setState({
-            ...state,
-            [event.target.name]: event.target.checked,
-        });
+        setValue((event.target as HTMLInputElement).value);
     };
-
-    const {usedParts, newParts} = state;
 
     return <Paper sx={styles.formContainer}>
         <Box sx={styles.inputFields}>
-            <MarkModelInputForm />
+            <MarkModelInputForm/>
         </Box>
 
         <Box sx={styles.inputFields}>
@@ -67,20 +58,32 @@ const FormInput = () => {
 
         <FormInputTxt title={"Описание"}/>
 
-        <Box sx={{m:1}}>
-            <Typography variant={"h4"}>Состояние запчасти</Typography>
+        <Box sx={{m: 1}}>
+            {/*<Typography variant={"h4"}>Состояние запчасти</Typography>*/}
+            <FormControl>
+                <FormLabel id="demo-radio-buttons-group-label">Состояние запчасти</FormLabel>
+                <RadioGroup
+                    name="radio-buttons-group"
+                    value={value}
+                    onChange={handleChange}
+                >
                     <FormControlLabel
+                        value={'Б/У'}
                         control={
-                            <Checkbox checked={usedParts} onChange={handleChange} name="usedParts" />
+                            <Radio/>
                         }
                         label="Б/У"
+
                     />
                     <FormControlLabel
+                        value={'Новая'}
                         control={
-                            <Checkbox checked={newParts} onChange={handleChange} name="newParts" />
+                            <Radio/>
                         }
                         label="Новая"
                     />
+                </RadioGroup>
+            </FormControl>
         </Box>
     </Paper>
 }
