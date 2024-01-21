@@ -1155,4 +1155,4 @@ export const BRANDS = [
         marka: "Урал",
         models: ['375', '4320', 'К', 'М']
     },
-] as const;
+];
