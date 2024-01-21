@@ -9,9 +9,10 @@ import {
 
 import FormSelect from "../FormInputsTyps/FormSelect.tsx";
 import FormInputTxt from "../FormInputsTyps/FormInputTxt.tsx";
-import {BODY_TYPE, FUELS, GEARBOX} from "../config/constants.ts";
+import {BODY_TYPE, GEARBOX} from "../config/constants.ts";
 import {PARTS} from "../config/constsParts.ts";
 import MarkModelInputForm from "../FormInputsTyps/MarkModelInputForm.tsx";
+import FuelEngineTypeInput from "../FormInputsTyps/FuelEngineTypeInput.tsx";
 
 const styles = {
     formContainer: {
@@ -20,7 +21,7 @@ const styles = {
         flexDirection: 'column',
         backgroundColor: "#d9d9d9",
     },
-    inputMarka: {
+    inputFields: {
         display: "flex"
     }
 }
@@ -41,22 +42,21 @@ const FormInput = () => {
     const {usedParts, newParts} = state;
 
     return <Paper sx={styles.formContainer}>
-        <Box sx={styles.inputMarka}>
+        <Box sx={styles.inputFields}>
             <MarkModelInputForm />
         </Box>
 
-        <Box sx={styles.inputMarka}>
+        <Box sx={styles.inputFields}>
             <FormInputTxt title={"Год выпуска"}/>
             <FormInputTxt title={"Модификация"}/>
         </Box>
 
-        <Box sx={styles.inputMarka}>
+        <Box sx={styles.inputFields}>
             <FormInputTxt title={"Объем"}/>
-            <FormSelect title={"Топливо"} isValue={FUELS}/>
-            {/*<FormSelect title={"Тип"}/>*/}
+            <FuelEngineTypeInput/>
         </Box>
 
-        <Box sx={styles.inputMarka}>
+        <Box sx={styles.inputFields}>
             <FormSelect title={"Тип кузова"} isValue={BODY_TYPE}/>
             <FormSelect title={"Коробка"} isValue={GEARBOX}/>
         </Box>

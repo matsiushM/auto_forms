@@ -93,23 +93,31 @@ export const BODY_TYPE = [
 export const FUELS = [
     {
         id: "",
-        title: "[не указано]"
+        title: "[не указано]",
+        engineType: []
     },
     {
         id: "11365",
-        title: "бензин"
+        title: "бензин",
+        engineType: ["EcoBoost", "FSI", "GDi", "HPi", "i", "i-VTEC", "IDE", "JTS", "Kompr", "MPI", "TCE", "TFSI", "THP",
+            "Ti", "TSI", "VTEC", "VTI", "VVT-i", "карб", "моно"]
     },
     {
         id: "11366",
-        title: "дизель"
+        title: "дизель",
+        engineType: ["BiTDi", "CDi", "CDT", "CDTi", "CRD", "CRDi", "cTDi", "D", "D-4D", "D-CAT", "D5", "DCi",
+            "DDiS", "Di", "DiD", "DT", "DTH", "DTi", "DTL", "HDi", "HPI", "HPT", "i-CTDi", "i-DTEC", "JTD", "SDi", "TD",
+            "TDCi", "TDDi", "TDi", "TDi PD", "TDS", "TiD", "VCDi", "XDI"]
     },
     {
         id: "12062",
-        title: "гибрид"
+        title: "гибрид",
+        engineType: []
     },
     {
         id: "14453",
-        title: "электро"
+        title: "электро",
+        engineType: []
     }
 ]
 export const BRANDS = [
