@@ -1,6 +1,6 @@
 import React, {useState} from "react";
 import {
-    Box,
+    Box, Button,
     FormControl,
     FormControlLabel, FormLabel,
     Paper, Radio, RadioGroup,
@@ -59,7 +59,6 @@ const FormInput = () => {
         <FormInputTxt title={"Описание"}/>
 
         <Box sx={{m: 1}}>
-            {/*<Typography variant={"h4"}>Состояние запчасти</Typography>*/}
             <FormControl>
                 <FormLabel id="demo-radio-buttons-group-label">Состояние запчасти</FormLabel>
                 <RadioGroup
@@ -85,6 +84,7 @@ const FormInput = () => {
                 </RadioGroup>
             </FormControl>
         </Box>
+        <Button sx={{backgroundColor: 'blue', color: 'white'}}>Отправить</Button>
     </Paper>
 }
 
