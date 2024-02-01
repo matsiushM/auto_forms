@@ -5,6 +5,14 @@ interface Props{
     title: string
 }
 
+const styles = {
+    textInput: {
+        // height: "35px",
+        backgroundColor:"#efffea",
+        borderRadius: "10px"
+    }
+}
+
 const FormInputTxt = ({title}: Props) => {
     const [value, setValue] = useState('');
 
@@ -13,8 +21,17 @@ const FormInputTxt = ({title}: Props) => {
     };
 
     return <Box sx ={{ m: 1}}>
-    <Typography variant={"h4"}>{title}</Typography>
-    <TextField id="outlined-basic" value={value} onChange={handleChange} label={title.toLowerCase()} variant="outlined"/>
+    <Typography variant={"h6"} color={"#001662"}>{title}</Typography>
+    <TextField
+        fullWidth
+        size ={'small'}
+        id="outlined-basic"
+        value={value}
+        onChange={handleChange}
+        label={title.toLowerCase()}
+        variant="outlined"
+        sx = {styles.textInput}
+    />
     </Box>
 }
 
