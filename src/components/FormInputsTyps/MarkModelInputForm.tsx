@@ -1,38 +1,43 @@
-import {useEffect, useState} from "react";
-import {Box, Button, Divider, FormControl, MenuItem, Select, SelectChangeEvent, Typography} from "@mui/material";
+import {useEffect, useMemo, useState} from "react";
+import {
+    Autocomplete,
+    Box,
+    Button,
+    Divider,
+    TextField,
+} from "@mui/material";
 import {v4 as uuidv4} from "uuid";
 
 import {BRANDS} from "../../config/constants.ts";
+import {Auto} from "../FormInput/type.ts";
 
-interface props{
-    id: string
-    autoAdd: Function
-    removeAuto: Function
+const styles = {
+    selectForm: {
+        size: 'small',
+        backgroundColor: "#efffea",
+        borderRadius: "10px",
+        m: 1
+    }
 }
 
-const MarkModelInputForm = ({id, autoAdd, removeAuto}:props) => {
-    const [marka, setMarka] = useState('');
-    const [model, setModel] = useState('');
+interface props {
+    id: string
+    autoAdd: (newAuto: Auto) => void
+    removeAuto: (index: string) => void
+}
 
-    const styles = {
-        selectForm: {
-            height: "35px",
-            backgroundColor: "#efffea",
-            borderRadius: "10px"
-        }
-    }
-    const handleChangeMark = (event: SelectChangeEvent) => {
-        setMarka(event.target.value);
+const MarkModelInputForm = ({id, autoAdd, removeAuto}: props) => {
+    const [marka, setMarka] = useState<string>('');
+    const [model, setModel] = useState<string>('');
+    const [carsModel, setCarModel] = useState<string[]>([]);
 
-    };
 
-    const handleChangeModel = (event: SelectChangeEvent) => {
-        setModel(event.target.value)
-    }
+    useEffect(() => {
+        const newModel = BRANDS.find(item => item.marka === marka)?.models;
+        // @ts-ignore
+        setCarModel(newModel);
+    }, [marka]);
 
-    const filteredOptions = Object.values(BRANDS).find(option =>
-        option.marka.toLowerCase().includes(marka.toLowerCase())
-    );
 
     useEffect(() => {
         autoAdd({
@@ -42,37 +47,38 @@ const MarkModelInputForm = ({id, autoAdd, removeAuto}:props) => {
         });
     }, [model]);
 
-    return <Box sx={{m: 1}}>
-        <FormControl fullWidth>
-            <Typography variant={"h6"} color={"#001662"}>Марка</Typography>
-            <Select
-                id='select-with-marka'
-                value={marka}
-                displayEmpty
-                inputProps={{'aria-label': 'Without label'}}
-                onChange={handleChangeMark}
+    const stateMarka = useMemo(() => {
+        return BRANDS.map(item => item.marka)
+    }, []);
+
+
+    return <Box>
+        <Autocomplete
+            disablePortal
+            fullWidth
+            id="combo-box-demo"
+            sx={styles.selectForm}
+            options={stateMarka}
+            renderInput={(params) => <TextField {...params} label="Марка"/>}
+            onChange={(_event, item) => {
+                // @ts-ignore
+                setMarka(item);
+            }}
+        />
+        {carsModel &&
+            <Autocomplete
+                disablePortal
+                fullWidth
+                id="combo-box-demo"
                 sx={styles.selectForm}
-            >
-                {Object.values(BRANDS).map(values => (
-                    <MenuItem key={values.id} value={values.marka}>{values.marka}</MenuItem>
-                ))}
-            </Select>
-        </FormControl>
-        <FormControl fullWidth>
-            <Typography variant={"h6"} color={"#001662"}>Модель</Typography>
-            <Select
-                id='select-with-model'
-                value={model}
-                displayEmpty
-                onChange={handleChangeModel}
-                inputProps={{'aria-label': 'Without label'}}
-                sx={styles.selectForm}
-            >
-                {filteredOptions?.models.map((values, index) => (
-                    <MenuItem key={index} value={values}>{values}</MenuItem>
-                ))}
-            </Select>
-        </FormControl>
+                options={carsModel}
+                renderInput={(params) => <TextField {...params} label="Модель"/>}
+                onChange={(_event, item) => {
+                    // @ts-ignore
+                    setModel(item);
+                }}
+            />
+        }
         <Button onClick={() => removeAuto(id)}>убрать</Button>
         <Divider/>
     </Box>

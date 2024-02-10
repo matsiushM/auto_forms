@@ -1,43 +1,36 @@
-import {Box, FormControl, MenuItem, Select, SelectChangeEvent, Typography} from "@mui/material";
-import {useState} from "react";
+import {
+    Autocomplete,
+    TextField,
+} from "@mui/material";
 
 interface Props {
-    isValue: object;
+    isValue: {id: string, title: string}[];
     title: string;
+    name: string
+    addValueSelect: (name: string, value: string)=>void
 }
 
 const styles = {
     selectForm: {
-        height: "35px",
         backgroundColor: "#efffea",
-        borderRadius: "10px"
+        borderRadius: "10px",
+        m: 1
     }
 }
 
-
-const FormSelect = ({title, isValue}: Props) => {
-    const [item, setItem] = useState('');
-
-    const handleChange = (event: SelectChangeEvent) => {
-        setItem(event.target.value);
+const FormSelect = ({title, isValue, addValueSelect, name}: Props) => {
+    const handleChange = (event: React.SyntheticEvent<Element, Event>, value: string) => {
+        addValueSelect(name, value);
     };
 
-    return <Box sx={{m: 1}}>
-        <FormControl fullWidth>
-            <Typography variant={"h5"} color={"#001662"}>{title}</Typography>
-            <Select
-                value={item}
-                displayEmpty
-                onChange={handleChange}
-                inputProps={{'aria-label': 'Without label'}}
-                defaultValue={Object.values(isValue)[0].title}
-                sx={styles.selectForm}
-            >
-                {Object.values(isValue).map(values => (
-                    <MenuItem key={values.id} id={values.id} value={values.title}>{values.title}</MenuItem>
-                ))}
-            </Select>
-        </FormControl>
-    </Box>
+    return<Autocomplete
+            disablePortal
+            fullWidth
+            id="combo-box-select"
+            sx={styles.selectForm}
+            options={isValue.map(item => item.title)}
+            renderInput={(params) => <TextField {...params} label={title}/>}
+            onChange={handleChange}
+        />
 }
 export default FormSelect

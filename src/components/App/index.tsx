@@ -9,11 +9,7 @@ const styles = {
         alignItems: 'center',
     }
 }
-
-
-
 const App = () => {
-
     return <Box sx={styles.paperContainer}>
         <FormInput/>
     </Box>

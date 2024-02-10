@@ -1,14 +1,14 @@
-import {useState} from "react";
+import React, {useState} from "react";
+import {Box, Button, FormControl, FormControlLabel, Paper, Radio, RadioGroup, Typography} from "@mui/material";
 
-
-import FormSelect from "../FormInputsTyps/FormSelect.tsx";
-import FormInputTxt from "../FormInputsTyps/FormInputTxt.tsx";
 import MarkModelInputForm from "../FormInputsTyps/MarkModelInputForm.tsx";
 import FuelEngineTypeInput from "../FormInputsTyps/FuelEngineTypeInput.tsx";
+import FormSelect from "../FormInputsTyps/FormSelect.tsx";
+import FormInputTxt from "../FormInputsTyps/FormInputTxt.tsx";
+import DataInput from "../FormInputsTyps/DataInput.tsx";
 import {BODY_TYPE, GEARBOX} from "../../config/constants.ts";
 import {PARTS} from "../../config/constsParts.ts";
-import {Auto} from "./type.ts";
-import {Button, FormControl, FormControlLabel, Paper, Radio, RadioGroup, Theme, Typography} from "@mui/material";
+import {Auto, DescriptionParts} from "./type.ts";
 
 const styles = {
     formContainer: {
@@ -17,59 +17,152 @@ const styles = {
         width: '90%'
     },
 }
+
 const FormInput = () => {
-    const [value, setValue] = useState('Б/У');
-    const [auto, setAuto] = useState<Auto[]>([]);
+    // const [auto, setAuto] => useState([]);
+    const [autoParts, setAutoParts] = useState<DescriptionParts>({
+        auto: [],
+        description: "",
+        engineType: "",
+        fuel: "",
+        gearBox: "",
+        numberParts: "",
+        parts: "",
+        pratsState: "",
+        typeBody: "",
+        volume: 0,
+        year: "",
+    });
+
     let item = {};
 
-    const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setValue((event.target as HTMLInputElement).value);
+    const handleChangePartsState = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setAutoParts((prevAutoParts) => ({
+            ...prevAutoParts,
+            pratsState: event.target.value,
+        }));
     };
 
-    // @ts-ignore
-    const autoAdd = (item) => {
-        setAuto([...auto, item]);
+    const handleClick = () => {
+        // const newParts = {
+        //     // auto: auto,
+        //     // year: year,
+        //     // volume: volume,
+        //     // fuel: fuel,
+        //     // engineType: engineType,
+        //     // typeBody: typeBode,
+        //     // gearBox: gearBox,
+        //     // parts: parts,
+        //     // numberParts: numberParts,
+        //     // description: description,
+        //     // pratsState: partsState,
+        // }
+
+        // const credentials = btoa(`111:`);
+
+        // const options = {
+        //     method: 'POST',
+        //     headers: {
+        //         'Authorization': `Basic ${credentials}`,
+        //         'Content-Type': 'application/json',
+        //     },
+        //     body: JSON.stringify(newParts),
+        // };
+
+        // fetch('http://178.124.201.2/InfoBase/hs/Zagruzka/Stoks/', options)
+        //     .then(response => {
+        //         if (!response.ok) {
+        //             throw new Error(`HTTP error! status: ${response.status}`);
+        //         }
+        //         return response.json();
+        //     })
+        //     .then(data => console.log(data))
+        //     .catch(error => console.error('Error:', error));
     }
+
+    const addValue = (name: string, value: string) => {
+        setAutoParts((prevAutoParts) => ({
+            ...prevAutoParts,
+            [name]: value,
+        }));
+    };
+
+    const addDate = (date: string) => {
+        setAutoParts((prevAutoParts) => ({
+        ...prevAutoParts,
+        year: date
+    }))
+    }
+
+    const addFuelEngine = (fuelType: string, engineType: string) => {
+        setAutoParts((prevAutoParts)=> ({
+            ...prevAutoParts,
+            fuel: fuelType,
+            engineType: engineType
+        }))
+    }
+
+    // @ts-ignore
+    const autoAdd = (newItem) => {
+        setAutoParts((prevAutoParts) => ({
+            ...prevAutoParts,
+            auto: [...prevAutoParts.auto, newItem], // Добавляем новый элемент в массив
+        }));
+    };
 
     const receiveAuto = (newAuto: Auto) => {
         item = newAuto;
     }
 
     const removeItem = (index: string) => {
-        setAuto(cars => cars.filter(item => item.id !== index));
-    }
+        setAutoParts(cars => ({
+            ...cars,
+            auto: cars.auto.filter(item => item.id !== index),
+        }));
+    };
 
-    console.log(auto);
+    console.log(autoParts);
+    return (
+        <Paper sx={styles.formContainer}>
 
-    return <Paper sx={styles.formContainer}>
+            {autoParts.auto.map((value, index) => (
+                <MarkModelInputForm key={index} id={value.id} autoAdd={receiveAuto} removeAuto={removeItem}/>
+            ))}
+            <Button onClick={() => autoAdd(item)}>Добавить</Button>
 
-        {auto.map((value, index) => (
-            <MarkModelInputForm key={index} id={value.id} autoAdd={receiveAuto} removeAuto={removeItem}/>
-        ))}
-        <Button onClick={() => autoAdd(item)}>Добавить</Button>
+            <Box>
+                <DataInput  getValueDate={addDate}/>
+            </Box>
 
-        <FormInputTxt title="Год выпуска"/>
-        <FormInputTxt title="Модификация"/>
+            <FormInputTxt name={"modification"}
+                          title="Модификация"
+                          addValue={addValue}/>
 
-        <FormInputTxt title="Объем"/>
-        <FuelEngineTypeInput/>
+            <FormInputTxt name={"volume"}
+                          title="Объем"
+                          addValue={addValue}/>
 
-        <FormSelect title="Тип кузова" isValue={BODY_TYPE}/>
-        <FormSelect title="Коробка" isValue={GEARBOX}/>
+            <FuelEngineTypeInput getValue={addFuelEngine}/>
 
-        <FormSelect title="Запчасть" isValue={PARTS}/>
+            <FormSelect title="Тип кузова" name={"typeBody"} isValue={BODY_TYPE} addValueSelect = {addValue}/>
+            <FormSelect title="Коробка" name={"gearBox"} isValue={GEARBOX} addValueSelect = {addValue}/>
 
-        <FormInputTxt title="Номер запчасти"/>
+            <FormSelect title="Запчасть" name={"parts"} isValue={PARTS} addValueSelect = {addValue}/>
 
-        <FormInputTxt title="Описание"/>
+            <FormInputTxt name={"numberParts"}
+                          title="Номер запчасти"
+                          addValue={addValue}/>
+
+            <FormInputTxt name={"description"}
+                          title="Описание"
+                          addValue={addValue}/>
 
             <FormControl>
                 <Typography variant={"h5"} color={"#001662"}>Состояние запчасти</Typography>
                 <RadioGroup
                     name="radio-buttons-group"
-                    value={value}
-                    onChange={handleChange}
-
+                    value={autoParts.pratsState}
+                    onChange={handleChangePartsState}
                 >
                     <FormControlLabel
                         value={'Б/У'}
@@ -77,7 +170,6 @@ const FormInput = () => {
                             <Radio/>
                         }
                         label="Б/У"
-
                     />
                     <FormControlLabel
                         value={'Новая'}
@@ -89,8 +181,9 @@ const FormInput = () => {
                 </RadioGroup>
             </FormControl>
 
-        <Button sx={{backgroundColor: 'blue', color: 'white', width: "100%"}}>Отправить</Button>
-    </Paper>
+            <Button sx={{backgroundColor: 'blue', color: 'white', width: "100%"}}
+                    onClick={handleClick}>Отправить</Button>
+        </Paper>
+    )
 }
-
 export default FormInput;

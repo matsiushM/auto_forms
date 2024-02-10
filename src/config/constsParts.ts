@@ -1,8 +1,4 @@
 export const PARTS = [
-   {
-        "id": "",
-        "title": "[не указано]"
-    },
     {
         "id": "1619",
         "title": "CD-чейнджер"
