@@ -10,7 +10,8 @@ const styles = {
     textInput: {
         // height: "35px",
         backgroundColor: "#efffea",
-        borderRadius: "10px"
+        borderRadius: "10px",
+        width: "100%"
     }
 }
 
@@ -21,11 +22,9 @@ const FormInputTxt = ({name, title, addValue}: Props) => {
         addValue(name, event.target.value);
     };
 
-    return <Box>
+    return <Box sx ={{m: 1}}>
         <Typography variant={"h6"} color={"#001662"}>{title}</Typography>
         <TextField
-            fullWidth
-            size={'small'}
             id="outlined-basic"
             onChange={handleChange}
             label={title.toLowerCase()}

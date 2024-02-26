@@ -7,6 +7,6 @@ export default defineConfig({
   base: 'auto_forms',
   plugins: [react()],
   server: {
-    port: 80,
+    port: 8080,
   },
 })

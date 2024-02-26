@@ -1,5 +1,5 @@
 import React, {useState} from "react";
-import {Box, Button, FormControl, FormControlLabel, Paper, Radio, RadioGroup, Typography} from "@mui/material";
+import {Button, FormControl, FormControlLabel, Paper, Radio, RadioGroup, Typography} from "@mui/material";
 
 import MarkModelInputForm from "../FormInputsTyps/MarkModelInputForm.tsx";
 import FuelEngineTypeInput from "../FormInputsTyps/FuelEngineTypeInput.tsx";
@@ -19,7 +19,6 @@ const styles = {
 }
 
 const FormInput = () => {
-    // const [auto, setAuto] => useState([]);
     const [autoParts, setAutoParts] = useState<DescriptionParts>({
         auto: [],
         description: "",
@@ -34,8 +33,6 @@ const FormInput = () => {
         year: "",
     });
 
-    let item = {};
-
     const handleChangePartsState = (event: React.ChangeEvent<HTMLInputElement>) => {
         setAutoParts((prevAutoParts) => ({
             ...prevAutoParts,
@@ -44,40 +41,23 @@ const FormInput = () => {
     };
 
     const handleClick = () => {
-        // const newParts = {
-        //     // auto: auto,
-        //     // year: year,
-        //     // volume: volume,
-        //     // fuel: fuel,
-        //     // engineType: engineType,
-        //     // typeBody: typeBode,
-        //     // gearBox: gearBox,
-        //     // parts: parts,
-        //     // numberParts: numberParts,
-        //     // description: description,
-        //     // pratsState: partsState,
-        // }
+        const options = {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(autoParts),
+        };
 
-        // const credentials = btoa(`111:`);
-
-        // const options = {
-        //     method: 'POST',
-        //     headers: {
-        //         'Authorization': `Basic ${credentials}`,
-        //         'Content-Type': 'application/json',
-        //     },
-        //     body: JSON.stringify(newParts),
-        // };
-
-        // fetch('http://178.124.201.2/InfoBase/hs/Zagruzka/Stoks/', options)
-        //     .then(response => {
-        //         if (!response.ok) {
-        //             throw new Error(`HTTP error! status: ${response.status}`);
-        //         }
-        //         return response.json();
-        //     })
-        //     .then(data => console.log(data))
-        //     .catch(error => console.error('Error:', error));
+        fetch('http://localhost:3000/data', options)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                return response.json();
+            })
+            .then(data => console.log(data))
+            .catch(error => console.error('Error:', error));
     }
 
     const addValue = (name: string, value: string) => {
@@ -89,50 +69,33 @@ const FormInput = () => {
 
     const addDate = (date: string) => {
         setAutoParts((prevAutoParts) => ({
-        ...prevAutoParts,
-        year: date
-    }))
+            ...prevAutoParts,
+            year: date
+        }))
     }
 
     const addFuelEngine = (fuelType: string, engineType: string) => {
-        setAutoParts((prevAutoParts)=> ({
+        setAutoParts((prevAutoParts) => ({
             ...prevAutoParts,
             fuel: fuelType,
             engineType: engineType
         }))
     }
 
-    // @ts-ignore
-    const autoAdd = (newItem) => {
-        setAutoParts((prevAutoParts) => ({
-            ...prevAutoParts,
-            auto: [...prevAutoParts.auto, newItem], // Добавляем новый элемент в массив
-        }));
-    };
-
-    const receiveAuto = (newAuto: Auto) => {
-        item = newAuto;
-    }
-
-    const removeItem = (index: string) => {
-        setAutoParts(cars => ({
-            ...cars,
-            auto: cars.auto.filter(item => item.id !== index),
-        }));
-    };
+        const addCar = (item: Auto[]) => {
+            setAutoParts((prevAutoParts) => ({
+                ...prevAutoParts,
+                auto: [...item]
+            }));
+        };
 
     console.log(autoParts);
+
     return (
         <Paper sx={styles.formContainer}>
+            <MarkModelInputForm autoAdd={addCar}/>
 
-            {autoParts.auto.map((value, index) => (
-                <MarkModelInputForm key={index} id={value.id} autoAdd={receiveAuto} removeAuto={removeItem}/>
-            ))}
-            <Button onClick={() => autoAdd(item)}>Добавить</Button>
-
-            <Box>
-                <DataInput  getValueDate={addDate}/>
-            </Box>
+            <DataInput getValueDate={addDate}/>
 
             <FormInputTxt name={"modification"}
                           title="Модификация"
@@ -144,10 +107,10 @@ const FormInput = () => {
 
             <FuelEngineTypeInput getValue={addFuelEngine}/>
 
-            <FormSelect title="Тип кузова" name={"typeBody"} isValue={BODY_TYPE} addValueSelect = {addValue}/>
-            <FormSelect title="Коробка" name={"gearBox"} isValue={GEARBOX} addValueSelect = {addValue}/>
+            <FormSelect title="Тип кузова" name={"typeBody"} isValue={BODY_TYPE} addValueSelect={addValue}/>
+            <FormSelect title="Коробка" name={"gearBox"} isValue={GEARBOX} addValueSelect={addValue}/>
 
-            <FormSelect title="Запчасть" name={"parts"} isValue={PARTS} addValueSelect = {addValue}/>
+            <FormSelect title="Запчасть" name={"parts"} isValue={PARTS} addValueSelect={addValue}/>
 
             <FormInputTxt name={"numberParts"}
                           title="Номер запчасти"
@@ -157,7 +120,7 @@ const FormInput = () => {
                           title="Описание"
                           addValue={addValue}/>
 
-            <FormControl>
+            <FormControl sx={{m:1}}>
                 <Typography variant={"h5"} color={"#001662"}>Состояние запчасти</Typography>
                 <RadioGroup
                     name="radio-buttons-group"

@@ -7,15 +7,22 @@ interface Props {
     getValueDate: (date: string) => void
 }
 
+const styles = {
+    m:1,
+    width: "100%",
+    backgroundColor: "#efffea"
+}
+
 const DataInput = ({getValueDate}: Props) => {
     return (
         <LocalizationProvider dateAdapter={AdapterDayjs} >
                 <DatePicker
-                    sx = {{m:1}}
+                    views={['year']}
+                    sx = {styles}
                     label="Год выпуска"
                     maxDate={dayjs().subtract(0, 'day')}
-                    format="DD.MM.YYYY"
-                    onChange={(newValue) => getValueDate(newValue.format("DD.MM.YYYY"))}
+                    format="YYYY"
+                    onChange={(newValue) => getValueDate(newValue.format("YYYY"))}
                 />
         </LocalizationProvider>
     )
