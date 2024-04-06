@@ -15,10 +15,10 @@ const styles = {
 }
 const App = () => {
     return <Box sx={styles.paperContainer}>
-        <BrowserRouter basename='auto-parts-form.netlify.app'>
+        <BrowserRouter basename='auto-parts-form.netlify.app/'>
             <ButtonAppBar/>
             <Routes>
-                <Route path={'auto-parts-form.netlify.app'} element={<FormInput/>}/>
+                <Route path={'/auto-parts-form.netlify.app'} element={<FormInput/>}/>
                 <Route path={'/qrscanner'} element={<LoadPhoto/>}/>
             </Routes>
         </BrowserRouter>
