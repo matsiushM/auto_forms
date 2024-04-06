@@ -20,8 +20,10 @@ const styles = {
 }
 
 const FormSelect = ({title, isValue, addValueSelect, name}: Props) => {
-    const handleChange = (event: React.SyntheticEvent<Element, Event>, value: string) => {
-        addValueSelect(name, value);
+    const handleChange = (_event: React.SyntheticEvent<Element, Event>, value: string | null) => {
+        if (value) {
+            addValueSelect(name, value);
+        }
     };
 
     return<Autocomplete

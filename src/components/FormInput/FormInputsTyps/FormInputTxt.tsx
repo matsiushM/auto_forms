@@ -1,4 +1,4 @@
-import {Box, TextField, Typography} from "@mui/material";
+import {Box, TextField} from "@mui/material";
 
 interface Props {
     title: string,
@@ -23,7 +23,6 @@ const FormInputTxt = ({name, title, addValue}: Props) => {
     };
 
     return <Box sx ={{m: 1}}>
-        <Typography variant={"h6"} color={"#001662"}>{title}</Typography>
         <TextField
             id="outlined-basic"
             onChange={handleChange}

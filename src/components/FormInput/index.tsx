@@ -1,22 +1,14 @@
 import React, {useState} from "react";
-import {Button, FormControl, FormControlLabel, Paper, Radio, RadioGroup, Typography} from "@mui/material";
+import {Button, FormControl, FormControlLabel, Paper, Radio, RadioGroup} from "@mui/material";
 
-import MarkModelInputForm from "../FormInputsTyps/MarkModelInputForm.tsx";
-import FuelEngineTypeInput from "../FormInputsTyps/FuelEngineTypeInput.tsx";
-import FormSelect from "../FormInputsTyps/FormSelect.tsx";
-import FormInputTxt from "../FormInputsTyps/FormInputTxt.tsx";
-import DataInput from "../FormInputsTyps/DataInput.tsx";
+import MarkModelInputForm from "./FormInputsTyps/MarkModelInputForm.tsx";
+import FuelEngineTypeInput from "./FormInputsTyps/FuelEngineTypeInput.tsx";
+import FormSelect from "./FormInputsTyps/FormSelect.tsx";
+import FormInputTxt from "./FormInputsTyps/FormInputTxt.tsx";
+import DataInput from "./FormInputsTyps/DataInput.tsx";
 import {BODY_TYPE, GEARBOX} from "../../config/constants.ts";
 import {PARTS} from "../../config/constsParts.ts";
 import {Auto, DescriptionParts} from "./type.ts";
-
-const styles = {
-    formContainer: {
-        p: 3,
-        backgroundColor: "background.default",
-        width: '90%'
-    },
-}
 
 const FormInput = () => {
     const [autoParts, setAutoParts] = useState<DescriptionParts>({
@@ -82,17 +74,15 @@ const FormInput = () => {
         }))
     }
 
-        const addCar = (item: Auto[]) => {
+    const addCar = (item: Auto[]) => {
             setAutoParts((prevAutoParts) => ({
                 ...prevAutoParts,
                 auto: [...item]
             }));
         };
 
-    console.log(autoParts);
-
     return (
-        <Paper sx={styles.formContainer}>
+        <Paper >
             <MarkModelInputForm autoAdd={addCar}/>
 
             <DataInput getValueDate={addDate}/>
@@ -121,7 +111,6 @@ const FormInput = () => {
                           addValue={addValue}/>
 
             <FormControl sx={{m:1}}>
-                <Typography variant={"h5"} color={"#001662"}>Состояние запчасти</Typography>
                 <RadioGroup
                     name="radio-buttons-group"
                     value={autoParts.pratsState}
@@ -144,8 +133,10 @@ const FormInput = () => {
                 </RadioGroup>
             </FormControl>
 
-            <Button sx={{backgroundColor: 'blue', color: 'white', width: "100%"}}
-                    onClick={handleClick}>Отправить</Button>
+            <Button variant="contained" sx={{width: "100%"}}
+                    onClick={handleClick}>
+                Отправить
+            </Button>
         </Paper>
     )
 }

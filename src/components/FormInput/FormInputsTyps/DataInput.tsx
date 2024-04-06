@@ -9,7 +9,6 @@ interface Props {
 
 const styles = {
     m:1,
-    width: "100%",
     backgroundColor: "#efffea"
 }
 
@@ -22,7 +21,10 @@ const DataInput = ({getValueDate}: Props) => {
                     label="Год выпуска"
                     maxDate={dayjs().subtract(0, 'day')}
                     format="YYYY"
-                    onChange={(newValue) => getValueDate(newValue.format("YYYY"))}
+                    onChange={(newValue) => {
+                        // @ts-ignore
+                        getValueDate(newValue.format("YYYY"));
+                    }}
                 />
         </LocalizationProvider>
     )

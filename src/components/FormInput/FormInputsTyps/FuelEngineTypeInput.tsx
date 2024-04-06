@@ -5,7 +5,7 @@ import {
     TextField,
 } from "@mui/material";
 
-import {FUELS} from "../../config/constants.ts";
+import {FUELS} from "../../../config/constants.ts";
 
 interface Props {
     getValue: (fuelType: string, engineType: string)=>void
@@ -23,12 +23,12 @@ const styles = {
 const FuelEngineTypeInput = ({getValue}: Props) => {
     const [fuel, setFuel] = useState('');
     const [engineType, setEngineType] = useState('')
-    const [engine, setEngine] = useState<string[]>('')
+    const [engine, setEngine] = useState<string[]>([""])
 
 
     useEffect(() => {
         const newTypeEngine = FUELS.find(item => item.title === fuel)?.engineType
-        setEngine(newTypeEngine);
+        setEngine(newTypeEngine ?? []);
     }, [fuel]);
 
     useEffect(() => {

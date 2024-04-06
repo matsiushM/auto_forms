@@ -1,8 +1,8 @@
-import { useState } from "react";
+import {useEffect, useState} from "react";
 import { Autocomplete, Box, Button, Divider, TextField } from "@mui/material";
 import { v4 as uuidv4 } from "uuid";
-import { BRANDS } from "../../config/constants.ts";
-import { Auto } from "../FormInput/type.ts";
+import { BRANDS } from "../../../config/constants.ts";
+import { Auto } from "../type.ts";
 
 const styles = {
     selectForm: {
@@ -23,15 +23,17 @@ const MarkModelInputForm = ({ autoAdd }: props) => {
 
     const addCar = () => {
         setCars(prevCars => [...prevCars, { id: uuidv4(), marka: '', model: '' }]);
-        autoAdd(cars);
     }
 
     const removeCar = (id: string) => {
         setCars(prevCars => prevCars.filter(car => car.id !== id));
     }
 
-    const stateMarka = BRANDS.map(item => item.marka);
+    useEffect(() => {
+        autoAdd(cars);
+    }, [cars]);
 
+    const stateMarka = BRANDS.map(item => item.marka);
 
     return (
         <Box>
