@@ -1,70 +1,120 @@
 import React, {useState} from "react";
-import {
-    Box, Button,
-    FormControl,
-    FormControlLabel, FormLabel,
-    Paper, Radio, RadioGroup,
-} from "@mui/material";
+import {Button, FormControl, FormControlLabel, Paper, Radio, RadioGroup} from "@mui/material";
 
-import FormSelect from "../FormInputsTyps/FormSelect.tsx";
-import FormInputTxt from "../FormInputsTyps/FormInputTxt.tsx";
-import {BODY_TYPE, GEARBOX} from "../config/constants.ts";
-import {PARTS} from "../config/constsParts.ts";
-import MarkModelInputForm from "../FormInputsTyps/MarkModelInputForm.tsx";
-import FuelEngineTypeInput from "../FormInputsTyps/FuelEngineTypeInput.tsx";
+import MarkModelInputForm from "./FormInputsTyps/MarkModelInputForm.tsx";
+import FuelEngineTypeInput from "./FormInputsTyps/FuelEngineTypeInput.tsx";
+import FormSelect from "./FormInputsTyps/FormSelect.tsx";
+import FormInputTxt from "./FormInputsTyps/FormInputTxt.tsx";
+import DataInput from "./FormInputsTyps/DataInput.tsx";
+import {BODY_TYPE, GEARBOX} from "../../config/constants.ts";
+import {PARTS} from "../../config/constsParts.ts";
+import {Auto, DescriptionParts} from "./type.ts";
 
-const styles = {
-    formContainer: {
-        p: 5,
-        display: 'flex',
-        flexDirection: 'column',
-        backgroundColor: "#d9d9d9",
-    },
-    inputFields: {
-        display: "flex"
-    }
-}
 const FormInput = () => {
+    const [autoParts, setAutoParts] = useState<DescriptionParts>({
+        auto: [],
+        description: "",
+        engineType: "",
+        fuel: "",
+        gearBox: "",
+        numberParts: "",
+        parts: "",
+        pratsState: "",
+        typeBody: "",
+        volume: 0,
+        year: "",
+    });
 
-    const [value, setValue] = useState('Б/У');
-
-    const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setValue((event.target as HTMLInputElement).value);
+    const handleChangePartsState = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setAutoParts((prevAutoParts) => ({
+            ...prevAutoParts,
+            pratsState: event.target.value,
+        }));
     };
 
-    return <Paper sx={styles.formContainer}>
-        <Box sx={styles.inputFields}>
-            <MarkModelInputForm/>
-        </Box>
+    const handleClick = () => {
+        const options = {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(autoParts),
+        };
 
-        <Box sx={styles.inputFields}>
-            <FormInputTxt title={"Год выпуска"}/>
-            <FormInputTxt title={"Модификация"}/>
-        </Box>
+        fetch('http://localhost:3000/data', options)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                return response.json();
+            })
+            .then(data => console.log(data))
+            .catch(error => console.error('Error:', error));
+    }
 
-        <Box sx={styles.inputFields}>
-            <FormInputTxt title={"Объем"}/>
-            <FuelEngineTypeInput/>
-        </Box>
+    const addValue = (name: string, value: string) => {
+        setAutoParts((prevAutoParts) => ({
+            ...prevAutoParts,
+            [name]: value,
+        }));
+    };
 
-        <Box sx={styles.inputFields}>
-            <FormSelect title={"Тип кузова"} isValue={BODY_TYPE}/>
-            <FormSelect title={"Коробка"} isValue={GEARBOX}/>
-        </Box>
+    const addDate = (date: string) => {
+        setAutoParts((prevAutoParts) => ({
+            ...prevAutoParts,
+            year: date
+        }))
+    }
 
-        <FormSelect title={"Запчасть"} isValue={PARTS}/>
+    const addFuelEngine = (fuelType: string, engineType: string) => {
+        setAutoParts((prevAutoParts) => ({
+            ...prevAutoParts,
+            fuel: fuelType,
+            engineType: engineType
+        }))
+    }
 
-        <FormInputTxt title={"Номер запчасти"}/>
+    const addCar = (item: Auto[]) => {
+            setAutoParts((prevAutoParts) => ({
+                ...prevAutoParts,
+                auto: [...item]
+            }));
+        };
 
-        <FormInputTxt title={"Описание"}/>
+    return (
+        <Paper >
+            <MarkModelInputForm autoAdd={addCar}/>
 
-        <Box sx={{m: 1}}>
-            <FormControl>
-                <FormLabel id="demo-radio-buttons-group-label">Состояние запчасти</FormLabel>
+            <DataInput getValueDate={addDate}/>
+
+            <FormInputTxt name={"modification"}
+                          title="Модификация"
+                          addValue={addValue}/>
+
+            <FormInputTxt name={"volume"}
+                          title="Объем"
+                          addValue={addValue}/>
+
+            <FuelEngineTypeInput getValue={addFuelEngine}/>
+
+            <FormSelect title="Тип кузова" name={"typeBody"} isValue={BODY_TYPE} addValueSelect={addValue}/>
+            <FormSelect title="Коробка" name={"gearBox"} isValue={GEARBOX} addValueSelect={addValue}/>
+
+            <FormSelect title="Запчасть" name={"parts"} isValue={PARTS} addValueSelect={addValue}/>
+
+            <FormInputTxt name={"numberParts"}
+                          title="Номер запчасти"
+                          addValue={addValue}/>
+
+            <FormInputTxt name={"description"}
+                          title="Описание"
+                          addValue={addValue}/>
+
+            <FormControl sx={{m:1}}>
                 <RadioGroup
                     name="radio-buttons-group"
-                    value={value}
-                    onChange={handleChange}
+                    value={autoParts.pratsState}
+                    onChange={handleChangePartsState}
                 >
                     <FormControlLabel
                         value={'Б/У'}
@@ -72,7 +122,6 @@ const FormInput = () => {
                             <Radio/>
                         }
                         label="Б/У"
-
                     />
                     <FormControlLabel
                         value={'Новая'}
@@ -83,9 +132,12 @@ const FormInput = () => {
                     />
                 </RadioGroup>
             </FormControl>
-        </Box>
-        <Button sx={{backgroundColor: 'blue', color: 'white'}}>Отправить</Button>
-    </Paper>
-}
 
+            <Button variant="contained" sx={{width: "100%"}}
+                    onClick={handleClick}>
+                Отправить
+            </Button>
+        </Paper>
+    )
+}
 export default FormInput;

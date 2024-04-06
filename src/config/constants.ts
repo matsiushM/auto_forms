@@ -1,9 +1,5 @@
 export const GEARBOX = [
     {
-        id: "",
-        title: "[не указано]"
-    },
-    {
         id: "1",
         title: "АКПП"
     },
@@ -21,10 +17,6 @@ export const GEARBOX = [
     }
 ]
 export const BODY_TYPE = [
-    {
-        id: "",
-        title: "[не указано]"
-    },
     {
         id: "45010",
         title: "седан"
@@ -92,11 +84,6 @@ export const BODY_TYPE = [
 ]
 export const FUELS = [
     {
-        id: "",
-        title: "[не указано]",
-        engineType: []
-    },
-    {
         id: "11365",
         title: "бензин",
         engineType: ["EcoBoost", "FSI", "GDi", "HPi", "i", "i-VTEC", "IDE", "JTS", "Kompr", "MPI", "TCE", "TFSI", "THP",
@@ -121,11 +108,6 @@ export const FUELS = [
     }
 ]
 export const BRANDS = [
-    {
-        id: "",
-        marka: '[не указано]',
-        models: [],
-    },
     {
         id: "9626",
         marka: 'Acura',
