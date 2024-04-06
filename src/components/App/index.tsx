@@ -15,7 +15,7 @@ const styles = {
 }
 const App = () => {
     return <Box sx={styles.paperContainer}>
-        <BrowserRouter basename='/auto-parts-form.netlify.app'>
+        <BrowserRouter basename='/'>
             <ButtonAppBar/>
             <Routes>
                 <Route path={'/'} element={<FormInput/>}/>
