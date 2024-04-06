@@ -15,7 +15,7 @@ const styles = {
 }
 const App = () => {
     return <Box sx={styles.paperContainer}>
-        <BrowserRouter basename='/'>
+        <BrowserRouter>
             <ButtonAppBar/>
             <Routes>
                 <Route path={'/'} element={<FormInput/>}/>
