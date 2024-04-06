@@ -18,7 +18,7 @@ const App = () => {
         <BrowserRouter basename='auto-parts-form.netlify.app/'>
             <ButtonAppBar/>
             <Routes>
-                <Route path={'/auto-parts-form.netlify.app'} element={<FormInput/>}/>
+                <Route path={'/'} element={<FormInput/>}/>
                 <Route path={'/qrscanner'} element={<LoadPhoto/>}/>
             </Routes>
         </BrowserRouter>
