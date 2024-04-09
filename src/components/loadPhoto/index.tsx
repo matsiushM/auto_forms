@@ -52,12 +52,16 @@ const LoadPhoto = () => {
         })
     }, [isEnable]);
 
+    const checkStatusOpen = (scannerStatus : boolean) => {
+        setEnable(scannerStatus);
+    }
+
     return (
         <>
             <Box>
                 <Box id="qrCodeContainer" sx={styles.qrCodeContainerStyle}/>
             </Box>
-            {!isEnable && <AddPhoto partsId={qrMessage}/>}
+            {!isEnable && <AddPhoto partsId={qrMessage} openScanner={checkStatusOpen}/>}
 
         </>
     )

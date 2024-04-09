@@ -3,6 +3,7 @@ import {ChangeEvent, useEffect, useState} from "react";
 
 interface props {
     partsId: string
+    openScanner: (scanner: boolean) => void
 }
 
 const AUTHORIZATION = 'OAuth y0_AgAAAAA8WrUJAADLWwAAAAD_JgSYAAAEIXKzAnBNdoW4jkq0KubJvKqX9w'
@@ -61,7 +62,7 @@ const publishUrl = async (filename: string, directory: string) => {
 
 }
 
-const AddPhoto = ({partsId}: props) => {
+const AddPhoto = ({partsId, openScanner}: props) => {
     const [sendUrl, setSendUrl] = useState<string[]>([])
     const [fotoUrl, setFotoUrl] = useState<string[]>([])
     const [selectedFile, setSelectedFile] = useState<File[]>([])
@@ -107,6 +108,10 @@ const AddPhoto = ({partsId}: props) => {
             });
         })
 
+        setSelectedFile([]);
+        setFotoUrl([]);
+        setSendUrl([]);
+        openScanner(true);
     }
 
     return (
