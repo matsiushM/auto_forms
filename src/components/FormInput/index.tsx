@@ -41,7 +41,7 @@ const FormInput = () => {
             body: JSON.stringify(autoParts),
         };
 
-        fetch('http://localhost:3000/data', options)
+        fetch('https://auto-forms-server.onrender.com/data', options)
             .then(response => {
                 if (!response.ok) {
                     throw new Error(`HTTP error! status: ${response.status}`);
