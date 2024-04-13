@@ -110,10 +110,10 @@ const AddPhoto = ({partsId, openScanner}: props) => {
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify(JSON.stringify({
-                "id" :  partsId,
-                "data" : publishedUrls,
-            })),
+            body: JSON.stringify({
+                    id: partsId,
+                    data: publishedUrls,
+                }),
         };
 
         fetch('https://auto-forms-server.onrender.com/dataPhoto', options)
