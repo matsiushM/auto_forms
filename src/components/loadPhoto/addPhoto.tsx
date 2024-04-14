@@ -3,9 +3,11 @@ import {ChangeEvent, useEffect, useState} from "react";
 
 interface props {
     partsId: string
+    openScanner: (scanner: boolean) => void
 }
 
 const AUTHORIZATION = 'OAuth y0_AgAAAAA8WrUJAADLWwAAAAD_JgSYAAAEIXKzAnBNdoW4jkq0KubJvKqX9w'
+
 const getUploadUrl = async (filename: string, directory: string) => {
     try {
         const path = encodeURIComponent(`/${directory}/${filename}`)
@@ -61,8 +63,7 @@ const publishUrl = async (filename: string, directory: string) => {
 
 }
 
-const AddPhoto = ({partsId}: props) => {
-    const [sendUrl, setSendUrl] = useState<string[]>([])
+const AddPhoto = ({partsId, openScanner}: props) => {
     const [fotoUrl, setFotoUrl] = useState<string[]>([])
     const [selectedFile, setSelectedFile] = useState<File[]>([])
 
@@ -76,16 +77,8 @@ const AddPhoto = ({partsId}: props) => {
     }, []);
 
     useEffect(() => {
-        if (!selectedFile || !sendUrl) {
-            return;
-        }
-
-        selectedFile.forEach((data) => {
-            getUploadUrl(data.name.split('.')[0], partsId).then(res => {
-                setSendUrl(prevUrl => [...prevUrl, res.href]);
-            });
-        });
-    }, [selectedFile]);
+        console.log(JSON.stringify(fotoUrl))
+    }, [fotoUrl]);
 
     const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
         if (!event.target.files) {
@@ -94,30 +87,60 @@ const AddPhoto = ({partsId}: props) => {
         setSelectedFile([...event.target.files])
     };
 
-    const handleClick = () => {
+
+    const handleClick = async () => {
         if (!selectedFile) {
             return
         }
-        selectedFile.forEach((data, index) => {
-            sendFile(sendUrl[index], data).then(() => {
-                publishUrl(data.name.split('.')[0], partsId)
-                    .then(data => {
-                        setFotoUrl(prevUrl => [...prevUrl, data.public_url])
-                    });
-            });
-        })
 
+
+
+        const publishedUrls = [];
+
+        for (const data of selectedFile) {
+            const fileName = data.name.split('.')[0];
+            const uploadUrlResponse = await getUploadUrl(fileName, partsId);
+            await sendFile(uploadUrlResponse.href, data);
+            const publishedUrl = await publishUrl(fileName, partsId);
+            publishedUrls.push(publishedUrl.public_url);
+        }
+
+        const options = {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                    id: partsId,
+                    data: publishedUrls,
+                }),
+        };
+
+        fetch('https://auto-forms-server.onrender.com/dataPhoto', options)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                return response.json();
+            })
+            .then(data => console.log(data))
+            .catch(error => console.error('Error:', error));
+
+        setSelectedFile([]);
+        setFotoUrl([]);
+        openScanner(true);
     }
+
 
     return (
         <>
             <Box>
-                <input type="file" onChange={handleFileChange} multiple/>
+                <input type="file" onChange={handleFileChange} multiple accept="image/*"/>
             </Box>
-            {fotoUrl && (
+            {selectedFile && (
                 <ImageList sx={{p: "3px"}} cols={3}>
                     {selectedFile.map((item) => (<ImageListItem key={item.name}>
-                        <img src={URL.createObjectURL(item)}/>
+                        <img src={URL.createObjectURL(item)} alt={item.name}/>
                     </ImageListItem>))}
                 </ImageList>
             )}

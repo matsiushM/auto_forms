@@ -11,6 +11,8 @@ const styles = {
         flexDirection: 'column',
         alignItems: 'center',
         backgroundColor: "background.default",
+        height: '80%',
+        width: '100%',
     }
 }
 const App = () => {
