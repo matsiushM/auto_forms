@@ -84,7 +84,7 @@ const AddPhoto = ({partsId, openScanner}: props) => {
         if (!event.target.files) {
             return
         }
-        setSelectedFile([...event.target.files])
+        setSelectedFile(prevImg => [...prevImg,...event.target.files])
     };
 
 
