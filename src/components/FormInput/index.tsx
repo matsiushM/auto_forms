@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import {useState} from "react";
 import {Button, FormControl, FormControlLabel, Paper, Radio, RadioGroup} from "@mui/material";
 
 import MarkModelInputForm from "./FormInputsTyps/MarkModelInputForm.tsx";
@@ -8,10 +8,16 @@ import FormInputTxt from "./FormInputsTyps/FormInputTxt.tsx";
 import DataInput from "./FormInputsTyps/DataInput.tsx";
 import {BODY_TYPE, GEARBOX} from "../../config/constants.ts";
 import {PARTS} from "../../config/constsParts.ts";
+import {sendPrats} from "../../api/parts";
+import AddMoreAuto from "./FormInputsTyps/AddMoreAuto.tsx";
+import {v4 as uuidv4} from "uuid";
+
 import {Auto, DescriptionParts} from "./type.ts";
+
 
 const FormInput = () => {
     const [autoParts, setAutoParts] = useState<DescriptionParts>({
+        mainAuto: {id: uuidv4(), model: "", marka: ""},
         auto: [],
         description: "",
         engineType: "",
@@ -33,23 +39,7 @@ const FormInput = () => {
     };
 
     const handleClick = () => {
-        const options = {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(autoParts),
-        };
-
-        fetch('https://auto-forms-server.onrender.com/data', options)
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-                return response.json();
-            })
-            .then(data => console.log(data))
-            .catch(error => console.error('Error:', error));
+        sendPrats(autoParts);
 
         alert("Форма отправлена");
     }
@@ -76,26 +66,37 @@ const FormInput = () => {
         }))
     }
 
-    const addCar = (item: Auto[]) => {
-            setAutoParts((prevAutoParts) => ({
-                ...prevAutoParts,
-                auto: [...item]
-            }));
-        };
+    const addAuto = (item: Auto) => {
+        setAutoParts((prevAutoParts) => ({
+            ...prevAutoParts,
+            mainAuto: item
+        }))
+    }
+
+    const addMoreAuto = (item: Auto[]) => {
+        setAutoParts((prevState)=>({
+            ...prevState,
+            auto: item,
+        }))
+    }
+
+    console.log(autoParts);
 
     return (
-        <Paper >
-            <MarkModelInputForm autoAdd={addCar}/>
+        <Paper>
+            <MarkModelInputForm addAuto = {addAuto}/>
 
-            <DataInput getValueDate={addDate}/>
+            <AddMoreAuto onChange={addMoreAuto}/>
+
+            <DataInput onChange={addDate}/>
 
             <FormInputTxt name={"modification"}
                           title="Модификация"
-                          addValue={addValue}/>
+                          onChange={addValue}/>
 
             <FormInputTxt name={"volume"}
                           title="Объем"
-                          addValue={addValue}/>
+                          onChange={addValue}/>
 
             <FuelEngineTypeInput getValue={addFuelEngine}/>
 
@@ -106,13 +107,13 @@ const FormInput = () => {
 
             <FormInputTxt name={"numberParts"}
                           title="Номер запчасти"
-                          addValue={addValue}/>
+                          onChange={addValue}/>
 
             <FormInputTxt name={"description"}
                           title="Описание"
-                          addValue={addValue}/>
+                          onChange={addValue}/>
 
-            <FormControl sx={{m:1}}>
+            <FormControl sx={{m: 1}}>
                 <RadioGroup
                     name="radio-buttons-group"
                     value={autoParts.pratsState}
@@ -135,8 +136,7 @@ const FormInput = () => {
                 </RadioGroup>
             </FormControl>
 
-            <Button variant="contained" sx={{width: "100%"}}
-                    onClick={handleClick}>
+            <Button variant="contained" sx={{width: "100%"}} onClick={handleClick}>
                 Отправить
             </Button>
         </Paper>

@@ -1,25 +1,24 @@
 import {Box, TextField} from "@mui/material";
+import theme from "../../../config/theme.ts";
 
 interface Props {
     title: string,
     name: string,
-    addValue: (name: string, value: string) => void,
+    onChange: (name: string, value: string) => void,
 }
 
 const styles = {
     textInput: {
-        // height: "35px",
-        backgroundColor: "#efffea",
+        backgroundColor: theme.palette.secondary.main,
         borderRadius: "10px",
         width: "100%"
     }
 }
 
-const FormInputTxt = ({name, title, addValue}: Props) => {
-
+const FormInputTxt = ({name, title, onChange}: Props) => {
 
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        addValue(name, event.target.value);
+        onChange(name, event.target.value);
     };
 
     return <Box sx ={{m: 1}}>

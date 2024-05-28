@@ -1,79 +1,87 @@
-import {useEffect, useState} from "react";
-import { Autocomplete, Box, Button, Divider, TextField } from "@mui/material";
-import { v4 as uuidv4 } from "uuid";
-import { BRANDS } from "../../../config/constants.ts";
-import { Auto } from "../type.ts";
+import {useEffect, useMemo, useState} from "react";
+import {Autocomplete, Divider, TextField} from "@mui/material";
+import {BRANDS} from "../../../config/constants.ts";
+import theme from "../../../config/theme.ts";
+import {v4 as uuidv4} from "uuid";
+
+import {Auto} from "../type.ts";
+
+interface Props {
+    auto?: Auto
+    addAuto: (item: Auto) => void,
+}
 
 const styles = {
     selectForm: {
-        lineHeight: '40px',
-        backgroundColor: "#efffea",
+        width: 'inherit',
+        backgroundColor: theme.palette.secondary.main,
         borderRadius: "10px",
-        m: 1,
-        width: "Auto",
+        m: 1
     },
-
-}
-interface props {
-    autoAdd: (newAuto: Auto[]) => void
 }
 
-const MarkModelInputForm = ({ autoAdd }: props) => {
-    const [cars, setCars] = useState<Auto[]>([{ id: uuidv4(), marka: '', model: '' }]);
+const MarkModelInputForm = ({auto, addAuto}: Props) => {
+    const [autoItem, setAutoItem] = useState<Auto>(auto || {id: uuidv4(), marka: "", model: ""});
 
-    const addCar = () => {
-        setCars(prevCars => [...prevCars, { id: uuidv4(), marka: '', model: '' }]);
+    const stateMarka = useMemo(() => BRANDS.map(item => item.marka), []);
+
+    const stateModel = useMemo(() => BRANDS.find(brand => brand.marka === autoItem.marka)?.models, [autoItem.marka]);
+
+    const selectMarka = (item: string) => {
+        if (item === null) {
+            setAutoItem((prevState) => ({
+                ...prevState,
+                marka: "",
+                model: "",
+            }));
+            return;
+        }
+        setAutoItem((prevState) => ({
+            ...prevState,
+            marka: item,
+        }))
     }
 
-    const removeCar = (id: string) => {
-        setCars(prevCars => prevCars.filter(car => car.id !== id));
+    const selectModel = (item: string) => {
+        if(item === null) item = "";
+        setAutoItem((prevState) => ({
+            ...prevState,
+            model: item,
+        }))
     }
 
     useEffect(() => {
-        autoAdd(cars);
-    }, [cars]);
+        addAuto(autoItem);
+    }, [autoItem.model]);
 
-    const stateMarka = BRANDS.map(item => item.marka);
+    console.log(autoItem)
 
     return (
-        <Box>
-            {cars.map((car, index) => (
-                <Box key={car.id}>
-                    <Autocomplete
-                        disablePortal
-                        fullWidth
-                        id={`combo-box-marka-${index}`}
-                        sx={styles.selectForm}
-                        options={stateMarka}
-                        renderInput={(params) => <TextField {...params} label="Марка" />}
-                        onChange={(_, item) => {
-                            const updatedCars = [...cars];
-                            updatedCars[index].marka = item || '';
-                            setCars(updatedCars);
-                        }}
-                    />
-                    {car.marka && (
-                        <Autocomplete
-                            disablePortal
-                            fullWidth
-                            id={`combo-box-model-${index}`}
-                            sx={styles.selectForm}
-                            options={BRANDS.find(brand => brand.marka === car.marka)?.models || []}
-                            renderInput={(params) => <TextField {...params} label="Модель" />}
-                            onChange={(_, item) => {
-                                const updatedCars = [...cars];
-                                updatedCars[index].model = item || '';
-                                setCars(updatedCars);
-                            }}
-                        />
-                    )}
-                    {index > 0 &&  <Button onClick={() => removeCar(car.id)}>Убрать</Button>}
-                    <Divider />
-                </Box>
-            ))}
-            <Button onClick={addCar}>Добавить</Button>
-        </Box>
-    );
+        <>
+            <Autocomplete
+                disablePortal
+                fullWidth
+                sx={styles.selectForm}
+                options={stateMarka}
+                renderInput={(params) => <TextField {...params} label="Марка"/>}
+                onChange={(_, item) => {
+                    selectMarka(item!)
+                }}
+            />
+            {autoItem.marka && (
+                <Autocomplete
+                    disablePortal
+                    fullWidth
+                    sx={styles.selectForm}
+                    options={stateModel!}
+                    renderInput={(params) => <TextField {...params} label="Модель"/>}
+                    onChange={(_, item) => {
+                        selectModel(item!)
+                    }}
+                />
+            )}
+            <Divider/>
+        </>
+    )
 };
-
 export default MarkModelInputForm;
