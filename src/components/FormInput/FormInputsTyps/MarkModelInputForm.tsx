@@ -54,8 +54,6 @@ const MarkModelInputForm = ({auto, addAuto}: Props) => {
         addAuto(autoItem);
     }, [autoItem.model]);
 
-    console.log(autoItem)
-
     return (
         <>
             <Autocomplete

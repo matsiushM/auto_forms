@@ -17,4 +17,5 @@ export interface DescriptionParts {
     numberParts: string,
     description: string,
     pratsState: string,
+    modification: string,
 }

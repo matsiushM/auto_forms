@@ -1,7 +1,9 @@
+import {DataItem} from "../../components/loadPhoto/type.ts";
+
 const Authorization = "OAuth y0_AgAAAAA8WrUJAADLWwAAAAD_JgSYAAAEIXKzAnBNdoW4jkq0KubJvKqX9w"
 
 export const creatDirectory = (partsId: string) => {
-    fetch(`https://cloud-api.yandex.net/v1/disk/resources?path=${partsId}`, {
+   return fetch(`https://cloud-api.yandex.net/v1/disk/resources?path=${partsId}`, {
         method: "PUT",
         headers: {
             'Authorization': Authorization
@@ -28,7 +30,7 @@ export const sendFile = async (url: string, file: File) => {
     const formData = new FormData()
     formData.append('file', file, file.name)
 
-    await fetch(url, {
+   return await fetch(url, {
         method: 'PUT',
         body: formData
     }).then(response => {
@@ -65,7 +67,7 @@ export const publishUrl = async (filename: string, directory: string) => {
     })
 }
 
-export const sendPhoto = (partsId: string, publishedUrls: string[]) => {
+export const sendPhoto = (partsId: string, publishedUrls: DataItem[]) => {
     const options = {
         method: 'POST',
         headers: {
@@ -77,14 +79,13 @@ export const sendPhoto = (partsId: string, publishedUrls: string[]) => {
         }),
     };
 
-    fetch('https://auto-forms-server.onrender.com/dataPhoto', options)
+   return fetch('https://auto-forms-server.onrender.com/dataPhoto', options)
         .then(response => {
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
             return response.json();
         })
-        .catch(error => console.error('Error:', error));
 }
 
 export const searchAuto = (id: string) => {
