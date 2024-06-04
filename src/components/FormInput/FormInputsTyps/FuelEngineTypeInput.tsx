@@ -1,4 +1,4 @@
-import {useEffect, useState} from "react";
+import {useState} from "react";
 import {
     Autocomplete,
     Box,
@@ -6,6 +6,7 @@ import {
 } from "@mui/material";
 
 import {FUELS} from "../../../config/constants.ts";
+import theme from "../../../config/theme.ts";
 
 interface Props {
     getValue: (fuelType: string, engineType: string)=>void
@@ -13,27 +14,22 @@ interface Props {
 
 const styles = {
     selectForm: {
-        backgroundColor: "#efffea",
+        width: 'inherit',
+        backgroundColor: theme.palette.secondary.main,
         borderRadius: "10px",
-        m: 1,
-        width: "Auto",
+        m: 1
     }
 }
 
 const FuelEngineTypeInput = ({getValue}: Props) => {
     const [fuel, setFuel] = useState('');
-    const [engineType, setEngineType] = useState('')
-    const [engine, setEngine] = useState<string[]>([""])
+    const [engines, setEngines] = useState<string[]>([])
 
-
-    useEffect(() => {
-        const newTypeEngine = FUELS.find(item => item.title === fuel)?.engineType
-        setEngine(newTypeEngine ?? []);
-    }, [fuel]);
-
-    useEffect(() => {
-        getValue(fuel, engineType);
-    }, [fuel, engineType]);
+    const selectFuel =(selectedFuel: string) => {
+        const newTypeEngine = FUELS.find(item => item.title === selectedFuel)?.engineType
+        setFuel(selectedFuel);
+        setEngines(newTypeEngine!);
+    }
 
     return <Box>
         <Autocomplete
@@ -44,21 +40,19 @@ const FuelEngineTypeInput = ({getValue}: Props) => {
             options={FUELS.map(item => item.title)}
             renderInput={(params) => <TextField {...params} label="Топливо"/>}
             onChange={(_event, item) => {
-                // @ts-ignore
-                setFuel(item);
+                selectFuel(item!);
             }}
         />
-        {engine &&
+        {engines &&
             <Autocomplete
                 disablePortal
                 fullWidth
                 id="combo-box-demo"
                 sx={styles.selectForm}
-                options={engine}
+                options={engines}
                 renderInput={(params) => <TextField {...params} label="Тип"/>}
-                onChange={(_event, item) => {
-                    // @ts-ignore
-                    setEngineType(item);
+                onChange={(_event, selectedEngine) => {
+                    getValue(fuel, selectedEngine!);
                 }}
             />
         }

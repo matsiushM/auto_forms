@@ -5,6 +5,7 @@ export interface Auto {
 }
 
 export interface DescriptionParts {
+    mainAuto: Auto,
     auto: Auto[],
     year: string,
     volume: number,
@@ -16,4 +17,5 @@ export interface DescriptionParts {
     numberParts: string,
     description: string,
     pratsState: string,
+    modification: string,
 }

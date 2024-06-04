@@ -1,7 +1,10 @@
 import {useEffect, useState} from "react";
 import {Html5Qrcode} from "html5-qrcode";
 import AddPhoto from "./addPhoto.tsx";
-import {Box} from "@mui/material";
+import {Box, Button, TextField} from "@mui/material";
+import AutoCard from "./AutoCard.tsx";
+import {BarcodeFormat} from "@zxing/library";
+import {searchAuto} from "../../api/photo";
 
 
 const styles = {
@@ -9,7 +12,6 @@ const styles = {
     qrCodeContainerStyle: {
         position: 'relative',
         borderRadius: '7px',
-
         width: '80vw',
         maxWidth: '500px',
         height: 'auto',
@@ -17,12 +19,31 @@ const styles = {
 }
 const LoadPhoto = () => {
     const [isEnable, setEnable] = useState(true)
-    const [qrMessage, setQrMessage] = useState('')
+    const [idParts, setIdParts] = useState('')
+    const [autoInfo, setAutoInfo] = useState("")
 
     useEffect(() => {
         const config = {
             fps: 30,
-            qrbox: 200,
+            qrbox: {width: 350, height: 250},
+            formatsToSupport: [
+                BarcodeFormat.CODE_128,
+                BarcodeFormat.CODE_39,
+                BarcodeFormat.CODE_93,
+                BarcodeFormat.EAN_8,
+                BarcodeFormat.EAN_13,
+                BarcodeFormat.ITF,
+                BarcodeFormat.UPC_A,
+                BarcodeFormat.UPC_E,
+                BarcodeFormat.PDF_417,
+                BarcodeFormat.AZTEC,
+                BarcodeFormat.CODABAR,
+                BarcodeFormat.DATA_MATRIX,
+                BarcodeFormat.MAXICODE,
+                BarcodeFormat.RSS_14,
+                BarcodeFormat.RSS_EXPANDED,
+                BarcodeFormat.UPC_EAN_EXTENSION,
+            ]
         };
         const html5QrCode = new Html5Qrcode("qrCodeContainer");
 
@@ -35,14 +56,13 @@ const LoadPhoto = () => {
         }
 
         const qrCodeSuccess = (decodedText: string) => {
-            setQrMessage(decodedText);
+            setIdParts(decodedText);
             setEnable(false);
         }
 
         if (isEnable) {
             // @ts-ignore
             html5QrCode.start({facingMode: 'environment'}, config, qrCodeSuccess);
-            setQrMessage("")
         } else {
             qrScannerStop()
         }
@@ -52,17 +72,44 @@ const LoadPhoto = () => {
         })
     }, [isEnable]);
 
-    const checkStatusOpen = (scannerStatus : boolean) => {
+    const checkStatusOpen = (scannerStatus: boolean) => {
         setEnable(scannerStatus);
     }
+
+    const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setIdParts(event.target.value.trim());
+    }
+
+    const handleClick = async () => {
+        try {
+            const data = await searchAuto(idParts);
+            setAutoInfo(data.id_1c);
+            setEnable(false);
+        } catch (error) {
+            console.error("Error searching auto", error);
+        }
+    };
 
     return (
         <>
             <Box>
                 <Box id="qrCodeContainer" sx={styles.qrCodeContainerStyle}/>
             </Box>
-            {!isEnable && <AddPhoto partsId={qrMessage} openScanner={checkStatusOpen}/>}
-
+            <TextField
+                id="outlined-basic"
+                onChange={handleChange}
+                label={"Номер"}
+                variant="outlined"
+                value={idParts}
+                sx={{m: 1}}
+            />
+            <Button variant="contained" sx={{m: 1}} onClick={handleClick}>Поиск</Button>
+            {autoInfo && (
+                <>
+                    <AutoCard value={autoInfo}/>
+                    <AddPhoto partsId={idParts} openScanner={checkStatusOpen}/>
+                </>
+            )}
         </>
     )
 };

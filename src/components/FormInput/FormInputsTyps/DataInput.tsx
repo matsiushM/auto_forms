@@ -2,17 +2,18 @@ import dayjs from 'dayjs';
 import {AdapterDayjs} from '@mui/x-date-pickers/AdapterDayjs';
 import {LocalizationProvider} from '@mui/x-date-pickers/LocalizationProvider';
 import {DatePicker} from '@mui/x-date-pickers/DatePicker';
+import theme from "../../../config/theme.ts";
 
 interface Props {
-    getValueDate: (date: string) => void
+    onChange: (date: string) => void
 }
 
 const styles = {
     m:1,
-    backgroundColor: "#efffea"
+    backgroundColor: theme.palette.secondary.main,
 }
 
-const DataInput = ({getValueDate}: Props) => {
+const DataInput = ({onChange}: Props) => {
     return (
         <LocalizationProvider dateAdapter={AdapterDayjs} >
                 <DatePicker
@@ -22,8 +23,7 @@ const DataInput = ({getValueDate}: Props) => {
                     maxDate={dayjs().subtract(0, 'day')}
                     format="YYYY"
                     onChange={(newValue) => {
-                        // @ts-ignore
-                        getValueDate(newValue.format("YYYY"));
+                        onChange(newValue!.format("YYYY"));
                     }}
                 />
         </LocalizationProvider>
