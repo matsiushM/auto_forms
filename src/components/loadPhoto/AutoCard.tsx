@@ -6,7 +6,7 @@ interface Props {
 
 const AutoCard = ({value}: Props) => {
     return (
-        <TableContainer sx={{width: '300px', m: 2}} component={Paper}>
+        <TableContainer sx={{width: '300px', mb:2}} component={Paper}>
             <Table aria-label="customized table">
                 <TableBody>
                     <TableRow>
