@@ -1,20 +1,26 @@
-import {useEffect, useState} from "react";
+import {ChangeEvent, useEffect, useState} from "react";
 import {Html5Qrcode} from "html5-qrcode";
 import AddPhoto from "./addPhoto.tsx";
 import {Box, Button, CircularProgress, TextField} from "@mui/material";
 import AutoCard from "./AutoCard.tsx";
 import {BarcodeFormat} from "@zxing/library";
 import {searchAuto} from "../../api/photo";
-
+import ModalMessage from "../ModalMessage.tsx";
 
 const styles = {
-
-    qrCodeContainerStyle: {
-        position: 'relative',
-        borderRadius: '7px',
-        width: '80vw',
-        maxWidth: '500px',
-        height: 'auto',
+    backgroundStyle: {
+        display: "flex",
+        flexDirection: "column",
+        width: {
+            xs: 350,
+            sm: 600,
+        },
+    },
+    laudeder: {
+        position: 'absolute',
+        top: '50%',
+        left: '50%',
+        transform: 'translate(-50%, -50%)',
     }
 }
 const LoadPhoto = () => {
@@ -22,11 +28,12 @@ const LoadPhoto = () => {
     const [idParts, setIdParts] = useState('')
     const [autoInfo, setAutoInfo] = useState("")
     const [loading, setLoading] = useState(false);
+    const [responseMessage, setResponseMessage] = useState("")
 
     useEffect(() => {
         const config = {
-            fps: 30,
-            qrbox: {width: 350, height: 250},
+            fps: 60,
+            qrbox: {width: 300, height: 200},
             formatsToSupport: [
                 BarcodeFormat.CODE_128,
                 BarcodeFormat.CODE_39,
@@ -77,46 +84,52 @@ const LoadPhoto = () => {
         setEnable(scannerStatus);
     }
 
-    const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
         setIdParts(event.target.value.trim());
     }
 
     const handleClick = async () => {
         try {
             setLoading(true)
-            const data = await searchAuto(idParts).finally(() => setLoading(false));
+            const data = await searchAuto(idParts);
             setAutoInfo(data.id_1c);
             setEnable(false);
         } catch (error) {
             console.error("Error searching auto", error);
+        } finally {
+            setLoading(false)
         }
     };
 
     return (
-        <>
-            {loading ? (<CircularProgress/>) : (
+        <Box sx={styles.backgroundStyle}>
+            <ModalMessage massage={responseMessage} isOpen={!!responseMessage}/>
+            {loading ? (<CircularProgress sx={styles.laudeder}/>) : (
                 <>
                     <Box>
-                        <Box id="qrCodeContainer" sx={styles.qrCodeContainerStyle}/>
+                        <Box id="qrCodeContainer"/>
                     </Box>
-                    <TextField
-                        id="outlined-basic"
-                        onChange={handleChange}
-                        label={"Номер"}
-                        variant="outlined"
-                        value={idParts}
-                        sx={{m: 1}}
-                    />
-                    <Button variant="contained" sx={{m: 1}} onClick={handleClick}>Поиск</Button>
-                    {autoInfo && (
+                    {isEnable ? (
+                        <>
+                            <TextField
+                                id="outlined-basic"
+                                onChange={handleChange}
+                                label={"Номер"}
+                                variant="outlined"
+                                value={idParts}
+                                sx={{m: 1}}
+                            />
+                            <Button variant="contained" sx={{m: 1}} onClick={handleClick}>Поиск</Button>
+                        </>
+                    ) : (
                         <>
                             <AutoCard value={autoInfo}/>
-                            <AddPhoto partsId={idParts} openScanner={checkStatusOpen}/>
+                            <AddPhoto partsId={idParts} openScanner={checkStatusOpen} setMessage={setResponseMessage}/>
                         </>
                     )}
                 </>
-            )
-            };
-        </>
-    )}
-    export default LoadPhoto;
+            )};
+        </Box>
+    )
+}
+export default LoadPhoto;

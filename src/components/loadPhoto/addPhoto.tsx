@@ -2,16 +2,15 @@ import {Box, Button, CircularProgress, ImageList, ImageListItem} from '@mui/mate
 import {ChangeEvent, useEffect, useState} from "react";
 import {creatDirectory, getUploadUrl, publishUrl, sendFile, sendPhoto} from "../../api/photo";
 import {DataItem} from "./type.ts";
-import ModalMessage from "../ModalMessage.tsx";
 
 interface props {
     partsId: string
     openScanner: (scanner: boolean) => void
+    setMessage: (massage: string) => void
 }
 
-const AddPhoto = ({partsId, openScanner}: props) => {
+const AddPhoto = ({partsId, openScanner,setMessage}: props) => {
     const [selectedFile, setSelectedFile] = useState<File[]>([])
-    const [responseMessage, setResponseMessage] = useState("")
     const [loading, setLoading] = useState(false);
 
     useEffect(() => {
@@ -41,10 +40,13 @@ const AddPhoto = ({partsId, openScanner}: props) => {
             publishedUrls.push({f_id: publishedUrl.public_url});
         }
 
-        sendPhoto(partsId,publishedUrls).then(res=> {setResponseMessage(res.id_1c)}).finally(() => setLoading(false));
+        sendPhoto(partsId,publishedUrls).then(res=> {setMessage(res.id_1c)}).finally(() => {
+            setLoading(false)
+            openScanner(true);
+        });
 
         setSelectedFile([]);
-        openScanner(true);
+
     }
 
     return (
@@ -62,8 +64,6 @@ const AddPhoto = ({partsId, openScanner}: props) => {
                         </ImageList>
                     )}
                     <Button variant="contained" onClick={handleClick}>Отправить</Button>
-
-                    <ModalMessage massage={responseMessage} isOpen={!!responseMessage}/>
                 </>
             )}
         </>
