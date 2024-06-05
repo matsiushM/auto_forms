@@ -1,7 +1,7 @@
 import {useEffect, useState} from "react";
 import {Html5Qrcode} from "html5-qrcode";
 import AddPhoto from "./addPhoto.tsx";
-import {Box, Button, TextField} from "@mui/material";
+import {Box, Button, CircularProgress, TextField} from "@mui/material";
 import AutoCard from "./AutoCard.tsx";
 import {BarcodeFormat} from "@zxing/library";
 import {searchAuto} from "../../api/photo";
@@ -21,6 +21,7 @@ const LoadPhoto = () => {
     const [isEnable, setEnable] = useState(true)
     const [idParts, setIdParts] = useState('')
     const [autoInfo, setAutoInfo] = useState("")
+    const [loading, setLoading] = useState(false);
 
     useEffect(() => {
         const config = {
@@ -82,7 +83,8 @@ const LoadPhoto = () => {
 
     const handleClick = async () => {
         try {
-            const data = await searchAuto(idParts);
+            setLoading(true)
+            const data = await searchAuto(idParts).finally(() => setLoading(false));
             setAutoInfo(data.id_1c);
             setEnable(false);
         } catch (error) {
@@ -92,26 +94,29 @@ const LoadPhoto = () => {
 
     return (
         <>
-            <Box>
-                <Box id="qrCodeContainer" sx={styles.qrCodeContainerStyle}/>
-            </Box>
-            <TextField
-                id="outlined-basic"
-                onChange={handleChange}
-                label={"Номер"}
-                variant="outlined"
-                value={idParts}
-                sx={{m: 1}}
-            />
-            <Button variant="contained" sx={{m: 1}} onClick={handleClick}>Поиск</Button>
-            {autoInfo && (
+            {loading ? (<CircularProgress/>) : (
                 <>
-                    <AutoCard value={autoInfo}/>
-                    <AddPhoto partsId={idParts} openScanner={checkStatusOpen}/>
+                    <Box>
+                        <Box id="qrCodeContainer" sx={styles.qrCodeContainerStyle}/>
+                    </Box>
+                    <TextField
+                        id="outlined-basic"
+                        onChange={handleChange}
+                        label={"Номер"}
+                        variant="outlined"
+                        value={idParts}
+                        sx={{m: 1}}
+                    />
+                    <Button variant="contained" sx={{m: 1}} onClick={handleClick}>Поиск</Button>
+                    {autoInfo && (
+                        <>
+                            <AutoCard value={autoInfo}/>
+                            <AddPhoto partsId={idParts} openScanner={checkStatusOpen}/>
+                        </>
+                    )}
                 </>
-            )}
+            )
+            };
         </>
-    )
-};
-
-export default LoadPhoto;
+    )}
+    export default LoadPhoto;
