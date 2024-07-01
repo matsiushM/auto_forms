@@ -18,4 +18,6 @@ export interface DescriptionParts {
     description: string,
     pratsState: string,
     modification: string,
+    storage: string,
+    shelf: string,
 }

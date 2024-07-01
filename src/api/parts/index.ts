@@ -9,7 +9,7 @@ export const sendPrats = (autoParts: DescriptionParts) => {
          body: JSON.stringify(autoParts),
      };
 
-     return  fetch('https://auto-forms-server.onrender.com/data', options)
+     return  fetch('http://localhost:3000/partsList', options)
          .then(response => {
              if (!response.ok) {
                  throw new Error(`HTTP error! status: ${response.status}`);

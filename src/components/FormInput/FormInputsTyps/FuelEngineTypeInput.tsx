@@ -6,7 +6,7 @@ import {
 } from "@mui/material";
 
 import {FUELS} from "../../../config/constants.ts";
-import theme from "../../../config/theme.ts";
+
 
 interface Props {
     getValue: (fuelType: string, engineType: string)=>void
@@ -15,7 +15,6 @@ interface Props {
 const styles = {
     selectForm: {
         width: 'inherit',
-        backgroundColor: theme.palette.secondary.main,
         borderRadius: "10px",
         m: 1
     }

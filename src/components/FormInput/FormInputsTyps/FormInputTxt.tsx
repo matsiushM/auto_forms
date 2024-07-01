@@ -1,5 +1,4 @@
 import {Box, TextField} from "@mui/material";
-import theme from "../../../config/theme.ts";
 
 interface Props {
     title: string,
@@ -9,7 +8,6 @@ interface Props {
 
 const styles = {
     textInput: {
-        backgroundColor: theme.palette.secondary.main,
         borderRadius: "10px",
         width: "100%"
     }

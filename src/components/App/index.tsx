@@ -5,24 +5,25 @@ import FormInput from "../FormInput";
 import LoadPhoto from "../loadPhoto";
 import ButtonAppBar from "../AppBar";
 
+
 const styles = {
     paperContainer: {
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
-        backgroundColor: "background.default",
         height: '80%',
         width: '100%',
     }
 }
 const App = () => {
+
     return <Box sx={styles.paperContainer}>
         <BrowserRouter>
-            <ButtonAppBar/>
-            <Routes>
-                <Route path={'/'} element={<FormInput/>}/>
-                <Route path={'/qrscanner'} element={<LoadPhoto/>}/>
-            </Routes>
+                    <ButtonAppBar/>
+                    <Routes>
+                        <Route path={'/'} element={<FormInput/>}/>
+                        <Route path={'/qrscanner'} element={<LoadPhoto/>}/>
+                    </Routes>
         </BrowserRouter>
     </Box>
 }

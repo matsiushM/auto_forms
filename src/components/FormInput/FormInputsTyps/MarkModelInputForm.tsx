@@ -1,7 +1,6 @@
 import {useEffect, useMemo, useState} from "react";
 import {Autocomplete, Divider, TextField} from "@mui/material";
 import {BRANDS} from "../../../config/constants.ts";
-import theme from "../../../config/theme.ts";
 import {v4 as uuidv4} from "uuid";
 
 import {Auto} from "../type.ts";
@@ -14,7 +13,6 @@ interface Props {
 const styles = {
     selectForm: {
         width: 'inherit',
-        backgroundColor: theme.palette.secondary.main,
         borderRadius: "10px",
         m: 1
     },

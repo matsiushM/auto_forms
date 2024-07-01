@@ -12,7 +12,6 @@ interface Props {
 
 const styles = {
     selectForm: {
-        backgroundColor: "#efffea",
         borderRadius: "10px",
         m: 1,
         width: "Auto",
