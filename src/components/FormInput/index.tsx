@@ -6,7 +6,7 @@ import FuelEngineTypeInput from "./FormInputsTyps/FuelEngineTypeInput.tsx";
 import FormSelect from "./FormInputsTyps/FormSelect.tsx";
 import FormInputTxt from "./FormInputsTyps/FormInputTxt.tsx";
 import DataInput from "./FormInputsTyps/DataInput.tsx";
-import {BODY_TYPE, GEARBOX} from "../../config/constants.ts";
+import {BODY_TYPE, GEARBOX, STORAGE} from "../../config/constants.ts";
 import {PARTS} from "../../config/constsParts.ts";
 import {sendPrats} from "../../api/parts";
 import AddMoreAuto from "./FormInputsTyps/AddMoreAuto.tsx";
@@ -30,7 +30,9 @@ const FormInput = () => {
         pratsState: "",
         typeBody: "",
         volume: 0,
-        year: ""
+        year: "",
+        shelf: "",
+        storage: "",
     });
     const [responseMessage, setResponseMessage] = useState("");
     const [loading, setLoading] = useState(false)
@@ -119,6 +121,10 @@ const FormInput = () => {
                     <FormInputTxt name={"description"}
                                   title="Описание"
                                   onChange={addValue}/>
+
+                    <FormSelect title="Склад" name={"storage"} isValue={STORAGE} addValueSelect={addValue}/>
+
+                    <FormInputTxt name={"shelf"} title="Место хранения" onChange={addValue}/>
 
                     <FormControl sx={{m: 1}}>
                         <RadioGroup

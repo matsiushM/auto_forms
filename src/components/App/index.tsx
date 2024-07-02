@@ -1,9 +1,6 @@
 import {Box} from "@mui/material";
-import {BrowserRouter, Route, Routes} from "react-router-dom";
-
-import FormInput from "../FormInput";
-import LoadPhoto from "../loadPhoto";
 import ButtonAppBar from "../AppBar";
+import Routing from "../Routing/insex..tsx";
 
 const styles = {
     paperContainer: {
@@ -17,13 +14,8 @@ const styles = {
 }
 const App = () => {
     return <Box sx={styles.paperContainer}>
-        <BrowserRouter>
-            <ButtonAppBar/>
-            <Routes>
-                <Route path={'/'} element={<FormInput/>}/>
-                <Route path={'/qrscanner'} element={<LoadPhoto/>}/>
-            </Routes>
-        </BrowserRouter>
+        <ButtonAppBar/>
+        <Routing/>
     </Box>
 }
 
