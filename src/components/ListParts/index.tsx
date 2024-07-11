@@ -39,8 +39,8 @@ const ListParts = () => {
     const [loading, setLoading] = useState<boolean>(false);
     const [searchData, setSearchData] = useState<searchPartsDate>({
         login: user,
-        Date1: "",
-        Date2: "",
+        Date1:  dayjs().subtract(0,'day').format("DD.MM.YYYY"),
+        Date2: dayjs().subtract(0,'day').format("DD.MM.YYYY"),
     })
     const [listPartsData, setListPartsData] = useState<ListPartData[]>([])
 
@@ -68,6 +68,7 @@ const ListParts = () => {
             .finally(() => setLoading(false))
     }
 
+    console.log(searchData)
 
     return (
         <Box sx={{display: "flex", justifyContent: "center", flexDirection: "column"}}>
@@ -80,6 +81,7 @@ const ListParts = () => {
                         label="От"
                         sx={styles.selectData}
                         maxDate={dayjs().subtract(0, 'day')}
+                        defaultValue={dayjs().subtract(0, 'day')}
                         onChange={(newValue) => {
                             handleBeforeChange(newValue!.format("DD.MM.YYYY"));
                         }}
@@ -90,6 +92,7 @@ const ListParts = () => {
                         label="До"
                         sx={styles.selectData}
                         maxDate={dayjs().subtract(0, 'day')}
+                        defaultValue={dayjs().subtract(0, 'day')}
                         onChange={(newValue) => {
                             handleAfterChange(newValue!.format("DD.MM.YYYY"));
                         }}
@@ -98,9 +101,11 @@ const ListParts = () => {
             </Box>
             <Button onClick={handleClick} variant={"contained"}>Поиск</Button>
 
-            {loading ? <Box sx={styles.circular}>
+            {loading ?
+                <Box sx={styles.circular}>
                     <CircularProgress/>
-                </Box> :
+                </Box>
+                :
                 <Paper sx={{m: 2}}>
                     <List disablePadding sx={{width: '100%'}}>
                         {listPartsData.map((item) => (
