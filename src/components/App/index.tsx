@@ -1,29 +1,25 @@
 import {Box} from "@mui/material";
-import {BrowserRouter, Route, Routes} from "react-router-dom";
-
-import FormInput from "../FormInput";
-import LoadPhoto from "../loadPhoto";
 import ButtonAppBar from "../AppBar";
+import Routing from "../Routing";
+import {useLocation} from "react-router-dom";
 
 const styles = {
     paperContainer: {
         display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
+        justifyContent: "center",
+        alignItems: "center",
+        flexDirection: "column",
         backgroundColor: "background.default",
-        height: '80%',
-        width: '100%',
+        width: "100%",
+        height: "100%",
     }
 }
 const App = () => {
+    const location = useLocation();
+
     return <Box sx={styles.paperContainer}>
-        <BrowserRouter>
-            <ButtonAppBar/>
-            <Routes>
-                <Route path={'/'} element={<FormInput/>}/>
-                <Route path={'/qrscanner'} element={<LoadPhoto/>}/>
-            </Routes>
-        </BrowserRouter>
+        {location.pathname !== "/login" && <ButtonAppBar/>}
+        <Routing/>
     </Box>
 }
 

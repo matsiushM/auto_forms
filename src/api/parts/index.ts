@@ -1,4 +1,5 @@
 import {DescriptionParts} from "../../components/FormInput/type.ts";
+import {searchPartsDate} from "../../components/ListParts/type.ts";
 
 export const sendPrats = (autoParts: DescriptionParts) => {
      const options = {
@@ -18,3 +19,18 @@ export const sendPrats = (autoParts: DescriptionParts) => {
          })
          .catch(error => console.error('Error:', error));
  }
+
+
+export const getPratsData = (searchData: searchPartsDate) => {
+    const options = {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(searchData),
+    };
+
+    return  fetch('https://auto-forms-server.onrender.com/load-parts/loadParts', options)
+        .then(response => response.json())
+        .catch(error => console.error('Error:', error));
+}

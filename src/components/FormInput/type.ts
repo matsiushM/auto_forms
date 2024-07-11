@@ -5,6 +5,7 @@ export interface Auto {
 }
 
 export interface DescriptionParts {
+    login: string,
     mainAuto: Auto,
     auto: Auto[],
     year: string,
@@ -18,4 +19,6 @@ export interface DescriptionParts {
     description: string,
     pratsState: string,
     modification: string,
+    shelf: string,
+    storage: string,
 }

@@ -1146,3 +1146,17 @@ export const BRANDS = [
         models: ['375', '4320', 'К', 'М']
     },
 ];
+export const STORAGE = [
+    {
+        id: "1",
+        title: 'Основоной склад'
+    },
+    {
+        id: "2",
+        title: 'Склад БВК'
+    },
+    {
+        id: "3",
+        title: 'Склад Стекловолокно'
+    }
+]
