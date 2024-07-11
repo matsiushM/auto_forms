@@ -71,9 +71,8 @@ const ListParts = () => {
     console.log(searchData)
 
     return (
-        <Box sx={{display: "flex", justifyContent: "center", flexDirection: "column"}}>
+        <Box sx={{display: "flex", justifyContent: "center", flexDirection: "column", width: "auto"}}>
             <Typography>Пользователь: {user}</Typography>
-            <Box>
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                     <DatePicker
                         format='DD.MM.YYYY'
@@ -98,7 +97,6 @@ const ListParts = () => {
                         }}
                     />
                 </LocalizationProvider>
-            </Box>
             <Button onClick={handleClick} variant={"contained"}>Поиск</Button>
 
             {loading ?
