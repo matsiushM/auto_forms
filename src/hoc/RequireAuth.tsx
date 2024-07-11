@@ -2,6 +2,7 @@ import {Navigate, useLocation} from "react-router-dom";
 import {useAuth} from "../hook/useAuth.tsx";
 
 
+// @ts-ignore
 const RequireAuth = ({children}) => {
     const location = useLocation()
     const {user} = useAuth();
