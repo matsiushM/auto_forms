@@ -5,6 +5,7 @@ export interface Auto {
 }
 
 export interface DescriptionParts {
+    login: string,
     mainAuto: Auto,
     auto: Auto[],
     year: string,

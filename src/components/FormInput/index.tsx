@@ -14,10 +14,13 @@ import {v4 as uuidv4} from "uuid";
 
 import {Auto, DescriptionParts} from "./type.ts";
 import ModalMessage from "../ModalMessage.tsx";
+import {useAuth} from "../../hook/useAuth.tsx";
 
 
 const FormInput = () => {
+    const {user} = useAuth();
     const [autoParts, setAutoParts] = useState<DescriptionParts>({
+        login: user,
         mainAuto: {id: uuidv4(), model: "", marka: ""},
         auto: [],
         description: "",
@@ -92,7 +95,7 @@ const FormInput = () => {
     return (
         <>
             {loading ? (<CircularProgress/>) : (
-                <Paper>
+                <Paper sx={{height:"100%"}}>
                     <MarkModelInputForm addAuto={addAuto}/>
 
                     <AddMoreAuto onChange={addMoreAuto}/>
