@@ -8,4 +8,10 @@ export interface ListPartData {
     Name: string,
     ID: string,
     in1c: string,
+    checked: boolean
+}
+
+export interface partsId {
+    login: string,
+    data : string[]
 }
