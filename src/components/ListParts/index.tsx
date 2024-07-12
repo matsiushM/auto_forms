@@ -90,6 +90,8 @@ const handleSendClick = () => {
     sendPratsID({login: user,data: idParts}).finally(()=> setMassage(true))
 }
 
+    console.log()
+
     return (
         <Box sx={{display: "flex", justifyContent: "center", flexDirection: "column", width: "auto"}}>
             <Typography>Пользователь: {user}</Typography>
@@ -124,6 +126,7 @@ const handleSendClick = () => {
                     <CircularProgress/>
                 </Box>
                 :
+                listPartsData.length>0 &&
                 <Paper sx={{m: 2, display: "flex", justifyContent: "center", flexDirection: "column", width: "auto"}}>
                     <List disablePadding sx={{width: '100%'}}>
                         {listPartsData.map((item) => (
