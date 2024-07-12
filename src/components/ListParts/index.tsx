@@ -21,6 +21,7 @@ import {getPratsData, sendPratsID} from "../../api/parts";
 
 import {ListPartData, searchPartsDate} from "./type.ts";
 import {green} from "@mui/material/colors";
+import ModalMessage from "../ModalMessage.tsx";
 
 const styles = {
     selectData: {
@@ -44,6 +45,7 @@ const ListParts = () => {
         Date2: dayjs().subtract(0, 'day').format("DD.MM.YYYY"),
     })
     const [listPartsData, setListPartsData] = useState<ListPartData[]>([])
+    const [massage, setMassage] = useState<boolean>(false);
 
     const handleBeforeChange = (date: string) => {
         setSearchData((prevState) => ({
@@ -83,9 +85,9 @@ const ListParts = () => {
     };
 
 const handleSendClick = () => {
+    setMassage(false)
     const idParts = listPartsData.filter(item => item.checked).map(item=> item.ID)
-    console.log(idParts)
-    sendPratsID({login: user,data: idParts})
+    sendPratsID({login: user,data: idParts}).finally(()=> setMassage(true))
 }
 
     return (
@@ -142,16 +144,16 @@ const handleSendClick = () => {
                                             checked={item.checked}
                                             onChange={(event) => handleChange(event, item.ID)}
                                         />)}
-
                                     <ListItemText>{item.Name}</ListItemText>
                                 </ListItem>
                                 <Divider/>
                             </>
                         ))}
                     </List>
-                    <Button variant={"contained"} onClick={handleSendClick}>Отправить</Button>
+                    <Button variant={"contained"} onClick={handleSendClick}>Сформировать</Button>
                 </Paper>
             }
+            <ModalMessage massage={"детали сформированы"} isOpen={massage}/>
         </Box>
     );
 }
