@@ -10,7 +10,7 @@ const PartsItemIn1c = ({parts}: props) => {
     const foto = JSON.parse(parts.foto)
 
     return (
-        <ListItem sx={{backgroundColor: foto? green[200] : yellow[200]}}
+        <ListItem sx={{backgroundColor: foto? '#a5d6a7' : '#fff59d'}}
                   key={parts.ID}
         >
             <ListItemText>{parts.Name}</ListItemText>
