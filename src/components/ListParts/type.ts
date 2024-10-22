@@ -8,7 +8,8 @@ export interface ListPartData {
     Name: string,
     ID: string,
     in1c: string,
-    checked: boolean
+    checked: boolean,
+    foto: string
 }
 
 export interface partsId {

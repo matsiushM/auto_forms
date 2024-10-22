@@ -20,6 +20,8 @@
     "@zxing/library": "^0.21.0",
     "axios": "^1.6.7",
     "dayjs": "^1.11.10",
+    "effector": "^23.2.3",
+    "effector-react": "^23.2.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-dropzone": "^14.2.3",
