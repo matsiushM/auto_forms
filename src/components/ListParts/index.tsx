@@ -20,7 +20,7 @@ import {ChangeEvent, useState} from "react";
 import {getPratsData, sendPratsID} from "../../api/parts";
 
 import {ListPartData, searchPartsDate} from "./type.ts";
-import {green, common, red} from "@mui/material/colors";
+import {red} from "@mui/material/colors";
 import ModalMessage from "../ModalMessage.tsx";
 import PartsItemIn1c from "./partsItem";
 
