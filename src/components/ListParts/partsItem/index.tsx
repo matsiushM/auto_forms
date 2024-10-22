@@ -1,6 +1,5 @@
 import {ListItem, ListItemText} from "@mui/material";
 import {ListPartData} from "../type.ts";
-import {green, yellow} from "@mui/material/colors";
 
 interface props {
     parts: ListPartData;
