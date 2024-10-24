@@ -68,8 +68,7 @@ const ListParts = () => {
         }))
     }
 
-    const handleClick = () => {
-        setLoading(true)
+    const responseParts = () => {
         getPratsData(searchData)
             .then((response) => {
                 console.log(response)
@@ -85,6 +84,11 @@ const ListParts = () => {
             .finally(() => setLoading(false))
     }
 
+    const handleClick = () => {
+        setLoading(true)
+        responseParts()
+    }
+
     const handleChange = (event: ChangeEvent<HTMLInputElement>, id: string) => {
         setListPartsData((prevState) =>
             prevState.map((item) =>
@@ -96,7 +100,10 @@ const ListParts = () => {
     const handleSendClick = () => {
         setMassage(false)
         const idParts = listPartsData.filter(item => item.checked).map(item => item.ID)
-        sendPratsID({login: user, data: idParts}).finally(() => setMassage(true))
+        sendPratsID({login: user, data: idParts}).finally(() => {
+            setMassage(true)
+            responseParts();
+        })
     }
 
     console.log(listPartsData)
@@ -149,7 +156,7 @@ const ListParts = () => {
                                                 checked={item.checked}
                                                 onChange={(event) => handleChange(event, item.ID)}
                                             />
-                                            <ListItemText>{item.Name}</ListItemText>
+                                            <ListItemText sx={{m:1}}>{item.Name}</ListItemText>
                                         </ListItem>
                                     )}
                                 <Divider/>
