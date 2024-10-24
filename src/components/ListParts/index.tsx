@@ -20,10 +20,17 @@ import {ChangeEvent, useState} from "react";
 import {getPratsData, sendPratsID} from "../../api/parts";
 
 import {ListPartData, searchPartsDate} from "./type.ts";
-import {green} from "@mui/material/colors";
+import {red} from "@mui/material/colors";
 import ModalMessage from "../ModalMessage.tsx";
+import PartsItemIn1c from "./partsItem";
 
 const styles = {
+    boxStyle: {
+        display: "flex",
+        justifyContent: "center",
+        flexDirection: "column",
+        width: "auto"
+    },
     selectData: {
         m: 1,
         backgroundColor: theme.palette.secondary.main,
@@ -61,13 +68,14 @@ const ListParts = () => {
         }))
     }
 
-    const handleClick = () => {
-        setLoading(true)
+    const responseParts = () => {
         getPratsData(searchData)
-            .then((response) =>  {const dataWithChecked = response.data.map((item: ListPartData) => ({
-            ...item,
-            checked: JSON.parse(item.in1c)
-        }))
+            .then((response) => {
+                console.log(response)
+                const dataWithChecked = response.data.map((item: ListPartData) => ({
+                    ...item,
+                    checked: JSON.parse(item.in1c)
+                }))
                 setListPartsData(dataWithChecked)
             })
             .catch(error => {
@@ -76,24 +84,32 @@ const ListParts = () => {
             .finally(() => setLoading(false))
     }
 
+    const handleClick = () => {
+        setLoading(true)
+        responseParts()
+    }
+
     const handleChange = (event: ChangeEvent<HTMLInputElement>, id: string) => {
         setListPartsData((prevState) =>
             prevState.map((item) =>
-                item.ID === id ? { ...item, checked: event.target.checked } : item
+                item.ID === id ? {...item, checked: event.target.checked} : item
             )
         );
     };
 
-const handleSendClick = () => {
-    setMassage(false)
-    const idParts = listPartsData.filter(item => item.checked).map(item=> item.ID)
-    sendPratsID({login: user,data: idParts}).finally(()=> setMassage(true))
-}
+    const handleSendClick = () => {
+        setMassage(false)
+        const idParts = listPartsData.filter(item => item.checked).map(item => item.ID)
+        sendPratsID({login: user, data: idParts}).finally(() => {
+            setMassage(true)
+            responseParts();
+        })
+    }
 
-    console.log()
+    console.log(listPartsData)
 
     return (
-        <Box sx={{display: "flex", justifyContent: "center", flexDirection: "column", width: "auto"}}>
+        <Box sx={styles.boxStyle}>
             <Typography>Пользователь: {user}</Typography>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
                 <DatePicker
@@ -126,29 +142,23 @@ const handleSendClick = () => {
                     <CircularProgress/>
                 </Box>
                 :
-                listPartsData.length>0 &&
+                listPartsData.length > 0 &&
                 <Paper sx={{m: 2, display: "flex", justifyContent: "center", flexDirection: "column", width: "auto"}}>
                     <List disablePadding sx={{width: '100%'}}>
                         {listPartsData.map((item) => (
                             <>
-                                <ListItem key={item.ID}>
-                                    {JSON.parse(item.in1c) ? (<Checkbox
-                                            checked={JSON.parse(item.in1c)}
-                                            disableRipple
-                                            sx={{
-                                                color: green[800],
-                                                '&.Mui-checked': {
-                                                    color: green[600],
-                                                },
-                                            }}
-                                        />)
-                                        :
-                                        (<Checkbox
-                                            checked={item.checked}
-                                            onChange={(event) => handleChange(event, item.ID)}
-                                        />)}
-                                    <ListItemText>{item.Name}</ListItemText>
-                                </ListItem>
+                                {JSON.parse(item.in1c) ? (
+                                        <PartsItemIn1c parts={item}/>
+                                    ) :
+                                    (
+                                        <ListItem disablePadding sx={{backgroundColor: red[300]}} key={item.ID}>
+                                            <Checkbox
+                                                checked={item.checked}
+                                                onChange={(event) => handleChange(event, item.ID)}
+                                            />
+                                            <ListItemText sx={{m:1}}>{item.Name}</ListItemText>
+                                        </ListItem>
+                                    )}
                                 <Divider/>
                             </>
                         ))}
